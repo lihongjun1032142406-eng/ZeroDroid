@@ -32,13 +32,8 @@ import com.abhishek.zerodroid.core.ui.TerminalCard
 import com.abhishek.zerodroid.features.ble.viewmodel.BleViewModel
 
 @Composable
-fun BleScreen(
-    viewModel: BleViewModel = hiltViewModel()
-) {
-    PermissionGate(
-        permissions = PermissionUtils.blePermissions(),
-        rationale = "Bluetooth permission is needed to scan for nearby BLE devices."
-    ) {
+fun BleScreen(viewModel: BleViewModel = hiltViewModel()) {
+    PermissionGate(permissions = PermissionUtils.blePermissions(), rationale = "需要蓝牙权限才能扫描附近的 BLE 设备。") {
         BleContent(viewModel = viewModel)
     }
 }
@@ -46,104 +41,33 @@ fun BleScreen(
 @Composable
 private fun BleContent(viewModel: BleViewModel) {
     val scanState by viewModel.scanState.collectAsState()
-
-    HardwareLifecycleEffect(
-        isActive = scanState.isScanning,
-        onPause = viewModel::stopScan,
-        onResume = viewModel::startScan
-    )
-
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
+    HardwareLifecycleEffect(isActive = scanState.isScanning, onPause = viewModel::stopScan, onResume = viewModel::startScan)
+    LazyColumn(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         item {
             Spacer(modifier = Modifier.height(4.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                if (scanState.isScanning) ScanningIndicator(isScanning = true, label = "已发现 ${scanState.devices.size} 个设备")
+                else Text(text = "> 已发现 ${scanState.devices.size} 个设备", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
                 if (scanState.isScanning) {
-                    ScanningIndicator(
-                        isScanning = true,
-                        label = "${scanState.devices.size} devices found"
-                    )
+                    OutlinedButton(onClick = { viewModel.toggleScan() }, colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error)) { Text("停止") }
                 } else {
-                    Text(
-                        text = "> ${scanState.devices.size} devices found",
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
-                if (scanState.isScanning) {
-                    OutlinedButton(
-                        onClick = { viewModel.toggleScan() },
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            contentColor = MaterialTheme.colorScheme.error
-                        )
-                    ) {
-                        Text("Stop")
-                    }
-                } else {
-                    Button(
-                        onClick = { viewModel.toggleScan() },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.primary
-                        )
-                    ) {
-                        Text("Scan")
-                    }
+                    Button(onClick = { viewModel.toggleScan() }, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)) { Text("扫描") }
                 }
             }
         }
-
-        scanState.error?.let { error ->
-            item {
-                Text(
-                    text = error,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.error
-                )
-            }
-        }
-
+        scanState.error?.let { error -> item { Text(text = error, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error) } }
         if (!scanState.isBluetoothEnabled) {
             item {
                 TerminalCard {
-                    Text(
-                        text = "> Bluetooth is off",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Text(
-                        text = "Turn on Bluetooth in system settings, then tap Scan again.",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                    Text(text = "> 蓝牙已关闭", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(text = "请在系统设置中开启蓝牙，然后再次点击“扫描”。", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
         }
-
         if (scanState.devices.isEmpty() && !scanState.isScanning) {
-            item {
-                EmptyState(
-                    icon = Icons.Default.Bluetooth,
-                    title = "No BLE devices found",
-                    subtitle = "Tap Scan to search for nearby Bluetooth Low Energy devices"
-                )
-            }
+            item { EmptyState(icon = Icons.Default.Bluetooth, title = "未发现 BLE 设备", subtitle = "点击“扫描”搜索附近的低功耗蓝牙设备") }
         }
-
-        items(scanState.devices, key = { it.address }) { device ->
-            BleDeviceItem(
-                device = device,
-                onBookmarkToggle = { viewModel.toggleBookmark(device) }
-            )
-        }
-
+        items(scanState.devices, key = { it.address }) { device -> BleDeviceItem(device = device, onBookmarkToggle = { viewModel.toggleBookmark(device) }) }
         item { Spacer(modifier = Modifier.height(16.dp)) }
     }
 }

@@ -44,7 +44,7 @@ fun SignalTimelineChart(
     val range = MAX_SIGNAL - MIN_SIGNAL
 
     TerminalCard(modifier = modifier) {
-        Text(text = "> Signal Timeline", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+        Text(text = "> 信号时间线", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
         Spacer(modifier = Modifier.height(4.dp))
 
         Row(modifier = Modifier.fillMaxWidth().height(120.dp)) {
@@ -112,7 +112,7 @@ fun SignalTimelineChart(
 
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = "Current: ${signalHistory.lastOrNull() ?: 0} dBm | Min: ${signalHistory.min()} | Max: ${signalHistory.max()} | Samples: ${signalHistory.size}",
+            text = "当前：${signalHistory.lastOrNull() ?: 0} dBm | 最低：${signalHistory.min()} | 最高：${signalHistory.max()} | 样本：${signalHistory.size}",
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

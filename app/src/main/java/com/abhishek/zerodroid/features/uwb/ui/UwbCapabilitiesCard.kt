@@ -17,13 +17,13 @@ fun UwbCapabilitiesCard(
 ) {
     TerminalCard(modifier = modifier) {
         Text(
-            text = "> UWB Capabilities",
+            text = "> UWB 能力",
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.primary
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = "Chipset: ${info.chipset}",
+            text = "芯片组：${info.chipset}",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurface
         )
@@ -38,7 +38,7 @@ fun UwbCapabilitiesCard(
             }
         } else {
             Text(
-                text = "No capabilities detected",
+                text = "未检测到可用能力",
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

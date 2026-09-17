@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">ZeroDroid</string>
+
+    <!-- HCE -->
+    <string name="hce_service_description">ZeroDroid NFC 卡片模拟</string>
+    <string name="hce_aid_group_description">NDEF 标签模拟</string>
+
+    <!-- Ethical use -->
+    <string name="ethical_title">负责任使用协议</string>
+    <string name="ethical_message">ZeroDroid 是一款用于教育目的的硬件探索工具。使用本工具即表示你同意：\n\n• 仅扫描你拥有或已获得授权测试的设备和网络\n• 不将本工具用于未经授权的访问或监控\n• 遵守所在地所有适用的法律法规\n\n滥用无线扫描工具可能违反相关法律法规。</string>
+    <string name="ethical_accept">我同意</string>
+    <string name="ethical_decline">拒绝</string>
+</resources>

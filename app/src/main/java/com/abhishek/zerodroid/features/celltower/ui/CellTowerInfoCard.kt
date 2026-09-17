@@ -73,7 +73,7 @@ fun CellTowerInfoCard(
                 }
                 cell.distanceMeters?.let { distance ->
                     Text(
-                        text = "~${distance}m from tower (TA:${cell.timingAdvance})",
+                        text = "距基站约 ${distance}m（TA:${cell.timingAdvance}）",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

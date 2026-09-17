@@ -1,7 +1,6 @@
 package com.abhishek.zerodroid.features.ir.ui
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -48,79 +47,39 @@ fun IrTransmitPanel(
     )
 
     TerminalCard(modifier = modifier) {
-        Text(
-            text = "> Transmit",
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.primary
-        )
+        Text(text = "> 发射", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
         Spacer(modifier = Modifier.height(8.dp))
 
-        ExposedDropdownMenuBox(
-            expanded = protocolExpanded,
-            onExpandedChange = { protocolExpanded = it }
-        ) {
-            OutlinedTextField(
-                value = state.selectedProtocol.displayName,
-                onValueChange = {},
-                readOnly = true,
-                label = { Text("Protocol") },
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = protocolExpanded) },
-                colors = fieldColors,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .menuAnchor(MenuAnchorType.PrimaryNotEditable)
-            )
-            ExposedDropdownMenu(
-                expanded = protocolExpanded,
-                onDismissRequest = { protocolExpanded = false }
-            ) {
+        ExposedDropdownMenuBox(expanded = protocolExpanded, onExpandedChange = { protocolExpanded = it }) {
+            OutlinedTextField(value = state.selectedProtocol.displayName, onValueChange = {}, readOnly = true,
+                label = { Text("协议") }, trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = protocolExpanded) },
+                colors = fieldColors, modifier = Modifier.fillMaxWidth().menuAnchor(MenuAnchorType.PrimaryNotEditable))
+            ExposedDropdownMenu(expanded = protocolExpanded, onDismissRequest = { protocolExpanded = false }) {
                 IrProtocol.entries.forEach { proto ->
-                    DropdownMenuItem(
-                        text = { Text(proto.displayName) },
-                        onClick = {
-                            onProtocolChange(proto)
-                            protocolExpanded = false
-                        }
-                    )
+                    DropdownMenuItem(text = { Text(proto.displayName) }, onClick = { onProtocolChange(proto); protocolExpanded = false })
                 }
             }
         }
 
         Spacer(modifier = Modifier.height(8.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            OutlinedTextField(
-                value = state.frequency.toString(),
-                onValueChange = { it.toIntOrNull()?.let(onFrequencyChange) },
-                label = { Text("Freq (Hz)") },
-                colors = fieldColors,
-                modifier = Modifier.weight(1f)
-            )
-            OutlinedTextField(
-                value = state.code,
-                onValueChange = onCodeChange,
-                label = { Text("Code (hex)") },
-                colors = fieldColors,
-                modifier = Modifier.weight(1f)
-            )
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            OutlinedTextField(value = state.frequency.toString(), onValueChange = { it.toIntOrNull()?.let(onFrequencyChange) },
+                label = { Text("频率 (Hz)") }, colors = fieldColors, modifier = Modifier.weight(1f))
+            OutlinedTextField(value = state.code, onValueChange = onCodeChange,
+                label = { Text("代码 (HEX)") }, colors = fieldColors, modifier = Modifier.weight(1f))
         }
 
         Spacer(modifier = Modifier.height(12.dp))
-        Button(
-            onClick = onTransmit,
+        Button(onClick = onTransmit,
             enabled = state.isIrAvailable && (state.code.isNotBlank() || state.selectedProtocol == IrProtocol.RAW),
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Transmit")
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary), modifier = Modifier.fillMaxWidth()) {
+            Text("发射")
         }
 
         state.lastTransmitResult?.let { result ->
             Spacer(modifier = Modifier.height(4.dp))
             val (text, color) = when (result) {
-                is TransmitResult.Success -> "Transmitted successfully" to MaterialTheme.colorScheme.primary
+                is TransmitResult.Success -> "发射成功" to MaterialTheme.colorScheme.primary
                 is TransmitResult.Error -> result.message to MaterialTheme.colorScheme.error
             }
             Text(text = text, style = MaterialTheme.typography.labelSmall, color = color)

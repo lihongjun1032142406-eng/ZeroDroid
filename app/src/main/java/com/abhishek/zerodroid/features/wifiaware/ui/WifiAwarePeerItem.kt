@@ -16,18 +16,18 @@ fun WifiAwarePeerItem(
     TerminalCard(modifier = modifier) {
         Column {
             Text(
-                text = "Service: ${peer.serviceName}",
+                text = "服务：${peer.serviceName}",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
             Text(
-                text = "ID: ${peer.serviceId}",
+                text = "ID：${peer.serviceId}",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.primary
             )
             peer.matchFilter?.let {
                 Text(
-                    text = "Filter: $it",
+                    text = "过滤器：$it",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

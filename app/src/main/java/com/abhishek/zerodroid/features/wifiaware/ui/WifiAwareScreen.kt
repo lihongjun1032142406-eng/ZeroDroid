@@ -28,7 +28,7 @@ fun WifiAwareScreen(
 ) {
     PermissionGate(
         permissions = PermissionUtils.wifiAwarePermissions(),
-        rationale = "Nearby devices / location permission is needed to discover Wi-Fi Aware peers."
+        rationale = "发现 Wi-Fi Aware 对等设备需要附近设备/位置权限。"
     ) {
         WifiAwareContent(viewModel = viewModel)
     }
@@ -59,12 +59,12 @@ private fun WifiAwareContent(viewModel: WifiAwareViewModel) {
             item {
                 TerminalCard {
                     Text(
-                        text = "> Wi-Fi Aware (NAN) not available",
+                        text = "> Wi-Fi Aware（NAN）不可用",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
-                        text = "This device does not support Wi-Fi Aware / Neighbor Awareness Networking",
+                        text = "此设备不支持 Wi-Fi Aware / 邻居感知网络（NAN）",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -92,7 +92,7 @@ private fun WifiAwareContent(viewModel: WifiAwareViewModel) {
         if (state.discoveredPeers.isNotEmpty()) {
             item {
                 Text(
-                    text = "> Discovered Peers (${state.discoveredPeers.size})",
+                    text = "> 已发现对等设备（${state.discoveredPeers.size}）",
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.primary
                 )

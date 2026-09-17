@@ -23,51 +23,27 @@ import com.abhishek.zerodroid.ui.theme.TerminalCyan
 import com.abhishek.zerodroid.ui.theme.TerminalGreen
 import com.abhishek.zerodroid.ui.theme.TerminalRed
 
-data class SecurityRating(
-    val level: String,
-    val label: String,
-    val color: Color,
-    val description: String
-)
+data class SecurityRating(val level: String, val label: String, val color: Color, val description: String)
 
 fun getSecurityRating(securityLabel: String): SecurityRating {
     val upper = securityLabel.uppercase()
     return when {
-        upper.contains("WPA3") -> SecurityRating("A+", "WPA3", TerminalCyan, "Enterprise-grade security")
-        upper.contains("WPA2") && upper.contains("AES") -> SecurityRating("A", "WPA2-AES", TerminalGreen, "Strong encryption")
-        upper.contains("WPA2") -> SecurityRating("B+", "WPA2", TerminalGreen, "Good security")
-        upper.contains("WPA") -> SecurityRating("C", "WPA", TerminalAmber, "Outdated encryption")
-        upper.contains("WEP") -> SecurityRating("D", "WEP", TerminalRed, "Easily cracked")
-        upper.contains("OPEN") || upper.isEmpty() -> SecurityRating("F", "Open", TerminalRed, "No encryption!")
-        else -> SecurityRating("B", securityLabel, TerminalGreen, "Encrypted")
+        upper.contains("WPA3") -> SecurityRating("A+", "WPA3", TerminalCyan, "企业级安全保护")
+        upper.contains("WPA2") && upper.contains("AES") -> SecurityRating("A", "WPA2-AES", TerminalGreen, "高强度加密")
+        upper.contains("WPA2") -> SecurityRating("B+", "WPA2", TerminalGreen, "安全性良好")
+        upper.contains("WPA") -> SecurityRating("C", "WPA", TerminalAmber, "加密方式已过时")
+        upper.contains("WEP") -> SecurityRating("D", "WEP", TerminalRed, "容易被破解")
+        upper.contains("OPEN") || upper.isEmpty() -> SecurityRating("F", "开放网络", TerminalRed, "未启用加密！")
+        else -> SecurityRating("B", securityLabel, TerminalGreen, "已加密")
     }
 }
 
 @Composable
 fun WifiSecurityBadge(securityLabel: String, modifier: Modifier = Modifier) {
     val rating = getSecurityRating(securityLabel)
-
-    Row(
-        modifier = modifier
-            .background(color = rating.color.copy(alpha = 0.1f), shape = MaterialTheme.shapes.extraSmall)
-            .padding(horizontal = 6.dp, vertical = 2.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            imageVector = when {
-                rating.level.startsWith("A") -> Icons.Default.Shield
-                rating.level == "F" -> Icons.Default.LockOpen
-                else -> Icons.Default.Lock
-            },
-            contentDescription = null,
-            tint = rating.color,
-            modifier = Modifier.size(12.dp)
-        )
+    Row(modifier = modifier.background(color = rating.color.copy(alpha = 0.1f), shape = MaterialTheme.shapes.extraSmall).padding(horizontal = 6.dp, vertical = 2.dp), verticalAlignment = Alignment.CenterVertically) {
+        Icon(imageVector = when { rating.level.startsWith("A") -> Icons.Default.Shield; rating.level == "F" -> Icons.Default.LockOpen; else -> Icons.Default.Lock }, contentDescription = null, tint = rating.color, modifier = Modifier.size(12.dp))
         Spacer(modifier = Modifier.width(4.dp))
-        Text(
-            text = "${rating.level} ${rating.label}",
-            style = MaterialTheme.typography.labelSmall,
-            color = rating.color
-        )
+        Text(text = "${rating.level} ${rating.label}", style = MaterialTheme.typography.labelSmall, color = rating.color)
     }
 }

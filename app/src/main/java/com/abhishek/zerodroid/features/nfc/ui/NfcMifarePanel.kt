@@ -35,7 +35,7 @@ fun NfcMifarePanel(
 ) {
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Text(
-            text = "> MIFARE Classic Dump (${sectors.size} sectors)",
+            text = "> MIFARE Classic 转储（${sectors.size} 个扇区）",
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.primary
         )
@@ -48,7 +48,7 @@ fun NfcMifarePanel(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = "Sectors Read: $authenticated/$total",
+                    text = "已读取扇区：$authenticated/$total",
                     style = MaterialTheme.typography.bodyMedium,
                     color = if (authenticated == total) TerminalGreen else TerminalAmber
                 )
@@ -77,20 +77,20 @@ private fun MifareSectorCard(sector: MifareSectorData) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Sector ${sector.sectorIndex}",
+                text = "扇区 ${sector.sectorIndex}",
                 style = MaterialTheme.typography.titleSmall,
                 color = if (sector.isAuthenticated) TerminalGreen else TerminalRed
             )
             if (sector.isAuthenticated) {
                 Text(
-                    text = "Key: ${sector.keyUsed}",
+                    text = "密钥：${sector.keyUsed}",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontFamily = FontFamily.Monospace
                 )
             } else {
                 Text(
-                    text = "LOCKED",
+                    text = "已锁定",
                     style = MaterialTheme.typography.labelSmall,
                     color = TerminalRed
                 )

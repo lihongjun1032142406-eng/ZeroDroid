@@ -55,7 +55,7 @@ fun GpsScreen(
 ) {
     PermissionGate(
         permissions = PermissionUtils.gpsPermissions(),
-        rationale = "Location permission is needed to track GPS position and satellites."
+        rationale = "跟踪 GPS 位置和卫星需要位置权限。"
     ) {
         GpsContent(viewModel)
     }
@@ -87,7 +87,7 @@ private fun GpsContent(viewModel: GpsViewModel) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "> GPS Tracker",
+                    text = "> GPS 跟踪器",
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.primary
                 )
@@ -97,14 +97,14 @@ private fun GpsContent(viewModel: GpsViewModel) {
                         colors = ButtonDefaults.outlinedButtonColors(
                             contentColor = MaterialTheme.colorScheme.error
                         )
-                    ) { Text("Stop") }
+                    ) { Text("停止") }
                 } else {
                     Button(
                         onClick = { viewModel.toggleTracking() },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.primary
                         )
-                    ) { Text("Track") }
+                    ) { Text("跟踪") }
                 }
             }
         }
@@ -112,7 +112,7 @@ private fun GpsContent(viewModel: GpsViewModel) {
         // Scanning indicator
         if (state.isTracking) {
             item {
-                ScanningIndicator(isScanning = true, label = "Tracking GPS...")
+                ScanningIndicator(isScanning = true, label = "正在跟踪 GPS...")
             }
         }
 
@@ -132,8 +132,8 @@ private fun GpsContent(viewModel: GpsViewModel) {
             item {
                 EmptyState(
                     icon = Icons.Default.LocationOff,
-                    title = "GPS Inactive",
-                    subtitle = "Tap Track to start receiving GPS data."
+                    title = "GPS 未启用",
+                    subtitle = "点击“跟踪”开始接收 GPS 数据。"
                 )
             }
         }
@@ -149,9 +149,9 @@ private fun GpsContent(viewModel: GpsViewModel) {
                 item {
                     Text(
                         text = if (satellitesExpanded)
-                            "> Satellites (${state.satellites.size}) [-]"
+                            "> 卫星（${state.satellites.size}）[-]"
                         else
-                            "> Satellites (${state.satellites.size}) [+]",
+                            "> 卫星（${state.satellites.size}）[+]",
                         style = MaterialTheme.typography.labelLarge,
                         color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.clickable { satellitesExpanded = !satellitesExpanded }
@@ -171,15 +171,15 @@ private fun GpsContent(viewModel: GpsViewModel) {
 private fun PositionCard(state: GpsState) {
     TerminalCard {
         Text(
-            text = "> Position",
+            text = "> 位置",
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.primary
         )
         Spacer(modifier = Modifier.height(8.dp))
-        DataRow("Latitude", String.format(Locale.US, "%.6f", state.latitude))
-        DataRow("Longitude", String.format(Locale.US, "%.6f", state.longitude))
-        DataRow("Altitude", String.format(Locale.US, "%.1f m", state.altitude))
-        DataRow("Provider", state.provider.uppercase())
+        DataRow("纬度", String.format(Locale.US, "%.6f", state.latitude))
+        DataRow("经度", String.format(Locale.US, "%.6f", state.longitude))
+        DataRow("海拔", String.format(Locale.US, "%.1f m", state.altitude))
+        DataRow("提供方", state.provider.uppercase())
     }
 }
 
@@ -190,14 +190,14 @@ private fun MotionCard(state: GpsState) {
 
     TerminalCard {
         Text(
-            text = "> Motion",
+            text = "> 运动",
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.primary
         )
         Spacer(modifier = Modifier.height(8.dp))
-        DataRow("Speed", String.format(Locale.US, "%.1f m/s (%.1f km/h)", state.speed, speedKmh))
-        DataRow("Bearing", String.format(Locale.US, "%.1f\u00B0 %s", state.bearing, direction))
-        DataRow("Accuracy", String.format(Locale.US, "\u00B1%.1f m", state.accuracy))
+        DataRow("速度", String.format(Locale.US, "%.1f m/s (%.1f km/h)", state.speed, speedKmh))
+        DataRow("方位", String.format(Locale.US, "%.1f\u00B0 %s", state.bearing, direction))
+        DataRow("精度", String.format(Locale.US, "\u00B1%.1f m", state.accuracy))
     }
 }
 
@@ -212,12 +212,12 @@ private fun SatelliteSummaryCard(state: GpsState) {
 
     TerminalCard {
         Text(
-            text = "> Satellite Summary",
+            text = "> 卫星摘要",
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.primary
         )
         Spacer(modifier = Modifier.height(8.dp))
-        DataRow("In Fix / Total", "$usedCount / $totalCount")
+        DataRow("参与定位 / 总数", "$usedCount / $totalCount")
         constellationCounts.forEach { (name, count) ->
             val usedInConstellation = state.satellites.count {
                 it.constellationName == name && it.usedInFix
@@ -256,7 +256,7 @@ private fun SatelliteRow(sat: SatelliteInfo) {
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = if (sat.usedInFix) "IN FIX" else "NO FIX",
+                        text = if (sat.usedInFix) "参与定位" else "未参与定位",
                         style = MaterialTheme.typography.labelSmall,
                         color = statusColor,
                         maxLines = 1
@@ -282,12 +282,12 @@ private fun SatelliteRow(sat: SatelliteInfo) {
                         color = TextDim
                     )
                     Text(
-                        text = "El: ${String.format(Locale.US, "%.0f", sat.elevationDeg)}\u00B0",
+                        text = "仰角: ${String.format(Locale.US, "%.0f", sat.elevationDeg)}\u00B0",
                         style = MaterialTheme.typography.bodySmall,
                         color = TextDim
                     )
                     Text(
-                        text = "Az: ${String.format(Locale.US, "%.0f", sat.azimuthDeg)}\u00B0",
+                        text = "方位角: ${String.format(Locale.US, "%.0f", sat.azimuthDeg)}\u00B0",
                         style = MaterialTheme.typography.bodySmall,
                         color = TextDim
                     )

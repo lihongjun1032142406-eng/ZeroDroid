@@ -40,7 +40,7 @@ fun LevelMeterView(tiltState: TiltState, modifier: Modifier = Modifier) {
         else -> TerminalRed
     }
 
-    val statusText = if (tiltState.isLevel) "LEVEL" else "TILTED"
+    val statusText = if (tiltState.isLevel) "水平" else "倾斜"
 
     TerminalCard(modifier = modifier, onClick = { expanded = !expanded }) {
         Row(
@@ -49,12 +49,12 @@ fun LevelMeterView(tiltState: TiltState, modifier: Modifier = Modifier) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "> Level Meter",
+                text = "> 水平仪",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.primary
             )
             Text(
-                text = "${String.format(Locale.US, "%.1f", tiltState.pitch)}\u00B0 \u00B7 ${String.format(Locale.US, "%.1f", tiltState.roll)}\u00B0 \u00B7 $statusText",
+                text = "${String.format(Locale.US, "%.1f", tiltState.pitch)}° · ${String.format(Locale.US, "%.1f", tiltState.roll)}° · $statusText",
                 style = MaterialTheme.typography.bodyMedium,
                 color = levelColor
             )
@@ -70,16 +70,16 @@ fun LevelMeterView(tiltState: TiltState, modifier: Modifier = Modifier) {
 
                 Row(modifier = Modifier.fillMaxWidth()) {
                     Column(modifier = Modifier.weight(1f)) {
-                        Text("Pitch", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        Text(String.format(Locale.US, "%.1f\u00B0", tiltState.pitch), style = MaterialTheme.typography.bodyLarge, color = levelColor)
+                        Text("俯仰", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(String.format(Locale.US, "%.1f°", tiltState.pitch), style = MaterialTheme.typography.bodyLarge, color = levelColor)
                     }
                     Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("Status", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text("状态", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         Text(statusText, style = MaterialTheme.typography.bodyLarge, color = levelColor)
                     }
                     Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.End) {
-                        Text("Roll", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        Text(String.format(Locale.US, "%.1f\u00B0", tiltState.roll), style = MaterialTheme.typography.bodyLarge, color = levelColor)
+                        Text("横滚", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(String.format(Locale.US, "%.1f°", tiltState.roll), style = MaterialTheme.typography.bodyLarge, color = levelColor)
                     }
                 }
 

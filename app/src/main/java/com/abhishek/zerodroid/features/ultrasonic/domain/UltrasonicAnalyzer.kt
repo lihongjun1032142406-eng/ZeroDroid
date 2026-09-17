@@ -43,12 +43,12 @@ class UltrasonicAnalyzer {
                 bufferSize
             )
         } catch (e: Exception) {
-            emit(UltrasonicState(error = "Failed to initialize audio: ${e.message}"))
+            emit(UltrasonicState(error = "音频初始化失败：${e.message}"))
             return@flow
         }
 
         if (recorder.state != AudioRecord.STATE_INITIALIZED) {
-            emit(UltrasonicState(error = "AudioRecord failed to initialize"))
+            emit(UltrasonicState(error = "AudioRecord 初始化失败"))
             recorder.release()
             return@flow
         }

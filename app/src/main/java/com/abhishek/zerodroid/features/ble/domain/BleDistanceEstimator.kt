@@ -14,11 +14,11 @@ object BleDistanceEstimator {
     }
 
     fun getDistanceLabel(distanceM: Double): String = when {
-        distanceM < 0 -> "Unknown"
-        distanceM < 0.5 -> "Immediate"
-        distanceM < 2.0 -> "Near (${String.format(Locale.US, "%.1f", distanceM)}m)"
-        distanceM < 10.0 -> "Medium (${String.format(Locale.US, "%.1f", distanceM)}m)"
-        else -> "Far (${String.format(Locale.US, "%.0f", distanceM)}m)"
+        distanceM < 0 -> "未知"
+        distanceM < 0.5 -> "极近"
+        distanceM < 2.0 -> "近（${String.format(Locale.US, "%.1f", distanceM)} m）"
+        distanceM < 10.0 -> "中等（${String.format(Locale.US, "%.1f", distanceM)} m）"
+        else -> "远（${String.format(Locale.US, "%.0f", distanceM)} m）"
     }
 
     fun getProximityLabel(distanceM: Double): String = when {

@@ -21,97 +21,39 @@ import com.abhishek.zerodroid.ui.theme.TerminalAmber
 import com.abhishek.zerodroid.ui.theme.TerminalRed
 
 @Composable
-fun UsbDeviceItem(
-    device: UsbDeviceInfo,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
+fun UsbDeviceItem(device: UsbDeviceInfo, onClick: () -> Unit, modifier: Modifier = Modifier) {
     val knownDevice = UsbDeviceDatabase.lookup(device.vidPid)
-
-    TerminalCard(
-        modifier = modifier,
-        onClick = onClick
-    ) {
+    TerminalCard(modifier = modifier, onClick = onClick) {
         Row(modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = device.productName ?: device.deviceName,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Text(
-                    text = "VID:PID ${device.vidPid}",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.primary
-                )
+                Text(text = device.productName ?: device.deviceName, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
+                Text(text = "VID:PID ${device.vidPid}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
             }
             Column(horizontalAlignment = androidx.compose.ui.Alignment.End) {
-                Text(
-                    text = device.deviceClassName,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Text(
-                    text = "${device.interfaceCount} interface(s)",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                Text(text = device.deviceClassName, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(text = "${device.interfaceCount} 个接口", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
-
         if (device.manufacturerName != null) {
             Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = "Manufacturer: ${device.manufacturerName}",
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+            Text(text = "制造商：${device.manufacturerName}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
-
         knownDevice?.let { known ->
             Spacer(modifier = Modifier.height(4.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                // Category badge
-                Text(
-                    text = known.category,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = known.threatLevel.color,
-                    modifier = Modifier
-                        .background(known.threatLevel.color.copy(alpha = 0.1f), MaterialTheme.shapes.extraSmall)
-                        .padding(horizontal = 6.dp, vertical = 1.dp)
-                )
-                // Threat badge (only for non-safe)
+                Text(text = known.category, style = MaterialTheme.typography.labelSmall, color = known.threatLevel.color, modifier = Modifier.background(known.threatLevel.color.copy(alpha = 0.1f), MaterialTheme.shapes.extraSmall).padding(horizontal = 6.dp, vertical = 1.dp))
                 if (known.threatLevel != ThreatLevel.SAFE) {
-                    Text(
-                        text = known.threatLevel.label,
-                        style = MaterialTheme.typography.labelSmall,
-                        color = known.threatLevel.color,
-                        modifier = Modifier
-                            .background(known.threatLevel.color.copy(alpha = 0.15f), MaterialTheme.shapes.extraSmall)
-                            .padding(horizontal = 6.dp, vertical = 1.dp)
-                    )
+                    Text(text = known.threatLevel.label, style = MaterialTheme.typography.labelSmall, color = known.threatLevel.color, modifier = Modifier.background(known.threatLevel.color.copy(alpha = 0.15f), MaterialTheme.shapes.extraSmall).padding(horizontal = 6.dp, vertical = 1.dp))
                 }
             }
             Text(text = known.description, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
-
         if (device.badUsbIndicators.isNotEmpty()) {
             Spacer(modifier = Modifier.height(6.dp))
             device.badUsbIndicators.forEach { indicator ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    Text(
-                        text = "WARNING:",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = TerminalRed
-                    )
-                    Text(
-                        text = indicator.description,
-                        style = MaterialTheme.typography.labelSmall,
-                        color = TerminalAmber
-                    )
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text(text = "警告：", style = MaterialTheme.typography.labelSmall, color = TerminalRed)
+                    Text(text = indicator.description, style = MaterialTheme.typography.labelSmall, color = TerminalAmber)
                 }
             }
         }

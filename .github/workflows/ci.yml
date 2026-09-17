@@ -60,3 +60,5 @@ jobs:
           name: ZeroDroid-zh-CN-debug
           path: app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
+
+# Final zh-CN APK build trigger

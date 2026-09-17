@@ -33,7 +33,7 @@ fun CellTowerScreen(
 ) {
     PermissionGate(
         permissions = PermissionUtils.cellTowerPermissions(),
-        rationale = "Phone and location permissions are needed to read cell tower information."
+        rationale = "读取蜂窝基站信息需要电话和位置权限。"
     ) {
         CellTowerContent(viewModel)
     }
@@ -63,7 +63,7 @@ private fun CellTowerContent(viewModel: CellTowerViewModel) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "> Cell Tower Monitor",
+                    text = "> 蜂窝基站监测",
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.primary,
                     maxLines = 1,
@@ -75,12 +75,12 @@ private fun CellTowerContent(viewModel: CellTowerViewModel) {
                     OutlinedButton(
                         onClick = { viewModel.stopMonitoring() },
                         colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error)
-                    ) { Text("Stop") }
+                    ) { Text("停止") }
                 } else {
                     Button(
                         onClick = { viewModel.startMonitoring() },
                         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-                    ) { Text("Monitor") }
+                    ) { Text("监测") }
                 }
             }
         }
@@ -95,15 +95,15 @@ private fun CellTowerContent(viewModel: CellTowerViewModel) {
             item {
                 TerminalCard {
                     Text(
-                        text = if (state.simAbsent) "> No SIM card detected" else "> No registered cell yet",
+                        text = if (state.simAbsent) "> 未检测到 SIM 卡" else "> 暂无已注册基站",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
                         text = if (state.simAbsent) {
-                            "Without a SIM the phone only listens to nearby towers, so only neighbour cells and no serving cell can be shown."
+                            "没有 SIM 卡时，手机只能监听附近基站，因此只能显示邻区基站，无法显示当前服务基站。"
                         } else {
-                            "Waiting for the modem to register on a network. Neighbour cells appear below as they are heard."
+                            "正在等待调制解调器注册到网络。监听到邻区基站后会显示在下方。"
                         },
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -119,7 +119,7 @@ private fun CellTowerContent(viewModel: CellTowerViewModel) {
                     signalStrength = cell.rssi
                 )
             }
-            item { CellTowerInfoCard(cell = cell, label = "> Registered Cell") }
+            item { CellTowerInfoCard(cell = cell, label = "> 当前注册基站") }
             if (state.signalHistory.isNotEmpty()) {
                 item { SignalTimelineChart(signalHistory = state.signalHistory) }
             }
@@ -133,7 +133,7 @@ private fun CellTowerContent(viewModel: CellTowerViewModel) {
             item {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "> IMSI Catcher Alerts (${state.alerts.size})",
+                    text = "> IMSI 捕获器警报（${state.alerts.size}）",
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.error
                 )

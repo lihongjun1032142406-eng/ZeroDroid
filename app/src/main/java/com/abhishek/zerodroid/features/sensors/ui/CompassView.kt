@@ -59,12 +59,12 @@ fun CompassView(heading: Float, modifier: Modifier = Modifier) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "> Compass",
+                text = "> 指南针",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.primary
             )
             Text(
-                text = "${String.format(Locale.US, "%.0f", heading)}\u00B0 $direction",
+                text = "${String.format(Locale.US, "%.0f", heading)}° $direction",
                 style = MaterialTheme.typography.bodyMedium,
                 color = TerminalGreen
             )

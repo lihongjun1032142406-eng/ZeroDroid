@@ -95,7 +95,7 @@ fun SdpServicePanel(
                 exit = fadeOut()
             ) {
                 Text(
-                    text = if (isCached) "[cached results]" else "[live SDP results]",
+                    text = if (isCached) "[缓存结果]" else "[实时 SDP 结果]",
                     color = if (isCached) TerminalAmber else TerminalCyan,
                     fontSize = 11.sp,
                     fontFamily = FontFamily.Monospace,
@@ -122,7 +122,7 @@ fun SdpServicePanel(
                 HorizontalDivider(color = TerminalGreen.copy(alpha = 0.3f))
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "> Found ${services.size} service${if (services.size != 1) "s" else ""}",
+                    text = "> 已发现 ${services.size} 项服务",
                     color = TerminalGreen,
                     fontSize = 13.sp,
                     fontFamily = FontFamily.Monospace,
@@ -130,7 +130,7 @@ fun SdpServicePanel(
                 )
             } else if (!isQuerying) {
                 Text(
-                    text = "> No services discovered. Tap \"Query SDP\" to scan.",
+                    text = "> 尚未发现服务。点击“查询 SDP”开始扫描。",
                     color = TerminalAmber,
                     fontSize = 12.sp,
                     fontFamily = FontFamily.Monospace,
@@ -154,7 +154,7 @@ private fun SdpHeader(
     ) {
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = "SDP Services",
+                text = "SDP 服务",
                 color = TerminalGreen,
                 fontSize = 16.sp,
                 fontFamily = FontFamily.Monospace,
@@ -162,7 +162,7 @@ private fun SdpHeader(
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
-                text = deviceName ?: "Unknown Device",
+                text = deviceName ?: "未知设备",
                 color = TerminalCyan,
                 fontSize = 13.sp,
                 fontFamily = FontFamily.Monospace,
@@ -217,14 +217,14 @@ private fun SdpQueryButton(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Querying SDP...",
+                    text = "正在查询 SDP...",
                     color = TerminalAmber,
                     fontSize = 13.sp,
                     fontFamily = FontFamily.Monospace
                 )
             } else {
                 Text(
-                    text = "> Query SDP",
+                    text = "> 查询 SDP",
                     color = TerminalGreen,
                     fontSize = 13.sp,
                     fontFamily = FontFamily.Monospace,

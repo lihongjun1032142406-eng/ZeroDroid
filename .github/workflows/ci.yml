@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main, develop, zh-CN]
   pull_request:
-    branches: [main, develop]
+    branches: [main, develop, zh-CN]
 
 permissions:
   contents: read
@@ -52,3 +52,11 @@ jobs:
           name: test-report
           path: app/build/reports/tests/
           if-no-files-found: ignore
+
+      - name: Upload debug APK
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ZeroDroid-zh-CN-debug
+          path: app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error

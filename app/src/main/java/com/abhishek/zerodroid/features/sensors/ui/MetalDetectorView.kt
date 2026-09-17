@@ -55,12 +55,12 @@ fun MetalDetectorView(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "> Metal Detector",
+                text = "> 金属检测器",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.primary
             )
             Text(
-                text = String.format(Locale.US, "%+.1f \u03BCT", state.deviation),
+                text = String.format(Locale.US, "%+.1f μT", state.deviation),
                 style = MaterialTheme.typography.bodyMedium,
                 color = barColor
             )
@@ -103,17 +103,17 @@ fun MetalDetectorView(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column {
-                        Text("Baseline", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text("基准值", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         Text(
-                            String.format(Locale.US, "%.1f \u03BCT", state.baseline),
+                            String.format(Locale.US, "%.1f μT", state.baseline),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurface
                         )
                     }
                     Column(horizontalAlignment = Alignment.End) {
-                        Text("Deviation", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text("偏差", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         Text(
-                            String.format(Locale.US, "%+.1f \u03BCT", state.deviation),
+                            String.format(Locale.US, "%+.1f μT", state.deviation),
                             style = MaterialTheme.typography.bodyMedium,
                             color = barColor
                         )
@@ -129,7 +129,7 @@ fun MetalDetectorView(
                         containerColor = MaterialTheme.colorScheme.primaryContainer
                     )
                 ) {
-                    Text("Recalibrate", color = MaterialTheme.colorScheme.primary)
+                    Text("重新校准", color = MaterialTheme.colorScheme.primary)
                 }
             }
         }

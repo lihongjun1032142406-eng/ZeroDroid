@@ -59,7 +59,7 @@ class UltrasonicViewModel @Inject constructor(
         toneJob = viewModelScope.launch(Dispatchers.Default) {
             try { toneGenerator.start(frequency) }
             catch (e: CancellationException) { throw e }
-            catch (e: Exception) { _state.value = _state.value.copy(isTonePlaying = false, error = "Tone generation failed: ${e.message}") }
+            catch (e: Exception) { _state.value = _state.value.copy(isTonePlaying = false, error = "音调生成失败：${e.message}") }
         }
     }
 

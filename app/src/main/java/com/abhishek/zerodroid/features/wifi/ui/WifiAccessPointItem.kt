@@ -63,7 +63,7 @@ fun WifiAccessPointItem(
                     WifiSignalBars(signalPercent = ap.signalPercent)
                 }
                 Text(
-                    text = "Ch ${ap.channel} · ${ap.band.label}",
+                    text = "信道 ${ap.channel} · ${ap.band.label}",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

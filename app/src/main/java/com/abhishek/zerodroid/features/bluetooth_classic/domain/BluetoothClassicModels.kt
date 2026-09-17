@@ -5,17 +5,17 @@ data class ClassicBluetoothDevice(
     val address: String,
     val rssi: Int = 0,
     val bondState: Int = 0,
-    val majorClass: String = "Unknown",
+    val majorClass: String = "未知",
     val minorClass: String = "",
     val isPaired: Boolean = false
 ) {
-    val displayName: String get() = name ?: "Unknown Device"
+    val displayName: String get() = name ?: "未知设备"
     val bondStateLabel: String
         get() = when (bondState) {
-            10 -> "Not Paired"
-            11 -> "Pairing..."
-            12 -> "Paired"
-            else -> "Unknown"
+            10 -> "未配对"
+            11 -> "正在配对..."
+            12 -> "已配对"
+            else -> "未知"
         }
 }
 

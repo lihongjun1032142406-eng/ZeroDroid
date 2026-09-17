@@ -39,7 +39,7 @@ fun ToneGeneratorPanel(
 ) {
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         TerminalCard {
-            Text(text = "> Tone Generator", style = MaterialTheme.typography.labelSmall, color = TerminalCyan)
+            Text(text = "> 音调发生器", style = MaterialTheme.typography.labelSmall, color = TerminalCyan)
             Spacer(modifier = Modifier.height(8.dp))
 
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Bottom) {
@@ -69,7 +69,7 @@ fun ToneGeneratorPanel(
             }
 
             Spacer(modifier = Modifier.height(12.dp))
-            Text(text = "Presets:", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(text = "预设：", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Spacer(modifier = Modifier.height(4.dp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                 listOf(18000, 19000, 20000, 21000, 22000).forEach { preset ->
@@ -83,16 +83,16 @@ fun ToneGeneratorPanel(
             Spacer(modifier = Modifier.height(12.dp))
             if (isPlaying) {
                 Button(onClick = onStop, colors = ButtonDefaults.buttonColors(containerColor = TerminalRed), modifier = Modifier.fillMaxWidth())
-                { Text("Stop Transmission") }
+                { Text("停止发射") }
             } else {
                 Button(onClick = onPlay, colors = ButtonDefaults.buttonColors(containerColor = TerminalGreen), modifier = Modifier.fillMaxWidth())
-                { Text("Start Transmission", color = MaterialTheme.colorScheme.surface) }
+                { Text("开始发射", color = MaterialTheme.colorScheme.surface) }
             }
         }
 
         // Waveform preview
         TerminalCard {
-            Text(text = "> Waveform Preview", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+            Text(text = "> 波形预览", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
             Spacer(modifier = Modifier.height(4.dp))
             WaveformPreview(isPlaying = isPlaying, modifier = Modifier.fillMaxWidth().height(100.dp))
         }
@@ -128,10 +128,10 @@ private fun WaveformPreview(isPlaying: Boolean, modifier: Modifier = Modifier) {
 }
 
 private fun frequencyDescription(hz: Int): String = when {
-    hz < 18500 -> "Near-ultrasonic threshold"
-    hz < 19500 -> "Low ultrasonic range"
-    hz < 20500 -> "Standard ultrasonic (inaudible to most adults)"
-    hz < 22000 -> "Mid ultrasonic range"
-    hz < 23000 -> "High ultrasonic range"
-    else -> "Near maximum ultrasonic"
+    hz < 18500 -> "接近超声波阈值"
+    hz < 19500 -> "低频超声波范围"
+    hz < 20500 -> "标准超声波（多数成年人不可听见）"
+    hz < 22000 -> "中频超声波范围"
+    hz < 23000 -> "高频超声波范围"
+    else -> "接近超声波最高频率"
 }

@@ -20,7 +20,7 @@ import javax.inject.Inject
 import androidx.core.graphics.toColorInt
 
 enum class QrGeneratorInputType(val displayName: String) {
-    TEXT("Text"), URL("URL"), WIFI("WiFi")
+    TEXT("文本"), URL("URL"), WIFI("WiFi")
 }
 
 data class QrGeneratorState(
@@ -82,7 +82,7 @@ class QrScannerViewModel @Inject constructor(
             Barcode.FORMAT_CODE_93 -> "Code 93"
             Barcode.FORMAT_ITF -> "ITF"
             Barcode.FORMAT_CODABAR -> "Codabar"
-            else -> "Unknown"
+            else -> "未知"
         }
 
         val result = QrScanResult(rawValue = rawValue, format = formatName,
@@ -142,7 +142,7 @@ class QrScannerViewModel @Inject constructor(
         _generatorState.value = if (bitmap != null) {
             _generatorState.value.copy(generatedBitmap = bitmap, encodedContent = content, errorMessage = null)
         } else {
-            _generatorState.value.copy(generatedBitmap = null, errorMessage = "Failed to generate QR code.")
+            _generatorState.value.copy(generatedBitmap = null, errorMessage = "二维码生成失败。")
         }
     }
 }

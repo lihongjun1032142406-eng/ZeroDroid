@@ -14,51 +14,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.abhishek.zerodroid.features.camera.domain.QrScanResult
-import com.abhishek.zerodroid.ui.theme.TerminalAmber
 import com.abhishek.zerodroid.ui.theme.TerminalRed
 
 @Composable
-fun QrResultCard(
-    result: QrScanResult,
-    modifier: Modifier = Modifier
-) {
+fun QrResultCard(result: QrScanResult, modifier: Modifier = Modifier) {
     val borderColor = if (result.isThreat) TerminalRed else MaterialTheme.colorScheme.outline
-
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-        border = BorderStroke(1.dp, borderColor)
-    ) {
+    Card(modifier = modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant), border = BorderStroke(1.dp, borderColor)) {
         Column(modifier = Modifier.padding(12.dp)) {
-            Text(
-                text = "[${result.format}] ${result.contentType.displayName}",
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.primary
-            )
+            Text(text = "[${result.format}] ${result.contentType.displayName}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
             Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = result.parsedContent,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurface,
-                maxLines = 5
-            )
-
+            Text(text = result.parsedContent, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurface, maxLines = 5)
             if (result.isThreat) {
                 Spacer(modifier = Modifier.height(6.dp))
-                Text(
-                    text = "THREAT: ${result.threatReason ?: "Suspicious content"}",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = TerminalRed
-                )
+                Text(text = "威胁：${result.threatReason ?: "可疑内容"}", style = MaterialTheme.typography.labelSmall, color = TerminalRed)
             }
-
             Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = result.rawValue,
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 2
-            )
+            Text(text = result.rawValue, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2)
         }
     }
 }

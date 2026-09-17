@@ -39,7 +39,7 @@ fun IrImportPanel(
 
     TerminalCard(modifier = modifier) {
         Text(
-            text = "> Flipper Zero IR Import",
+            text = "> Flipper Zero 红外导入",
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.primary
         )
@@ -49,13 +49,13 @@ fun IrImportPanel(
             onClick = { launcher.launch("*/*") },
             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
         ) {
-            Text("Import .ir File")
+            Text("导入 .ir 文件")
         }
 
         if (signals.isNotEmpty()) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "${signals.size} signal(s) loaded",
+                text = "已加载 ${signals.size} 个信号",
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -69,7 +69,7 @@ fun IrImportPanel(
                 ) {
                     Column {
                         Text(
-                            text = signal.name.ifEmpty { "Unnamed" },
+                            text = signal.name.ifEmpty { "未命名" },
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurface
                         )
@@ -80,7 +80,7 @@ fun IrImportPanel(
                         )
                     }
                     Text(
-                        text = "TAP TO SEND",
+                        text = "点击发送",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.primary
                     )

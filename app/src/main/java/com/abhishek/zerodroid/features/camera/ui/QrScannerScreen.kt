@@ -60,7 +60,7 @@ fun QrScannerScreen(
             FilterChip(
                 selected = state.activeTab == QrScreenTab.SCAN,
                 onClick = { viewModel.setActiveTab(QrScreenTab.SCAN) },
-                label = { Text("Scan", style = MaterialTheme.typography.labelMedium) },
+                label = { Text("扫描", style = MaterialTheme.typography.labelMedium) },
                 leadingIcon = { Icon(imageVector = Icons.Default.CameraAlt, contentDescription = null, modifier = Modifier.size(16.dp)) },
                 colors = FilterChipDefaults.filterChipColors(
                     selectedContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
@@ -71,7 +71,7 @@ fun QrScannerScreen(
             FilterChip(
                 selected = state.activeTab == QrScreenTab.GENERATE,
                 onClick = { viewModel.setActiveTab(QrScreenTab.GENERATE) },
-                label = { Text("Generate", style = MaterialTheme.typography.labelMedium) },
+                label = { Text("生成", style = MaterialTheme.typography.labelMedium) },
                 leadingIcon = { Icon(imageVector = Icons.Default.QrCode2, contentDescription = null, modifier = Modifier.size(16.dp)) },
                 colors = FilterChipDefaults.filterChipColors(
                     selectedContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
@@ -85,7 +85,7 @@ fun QrScannerScreen(
             QrScreenTab.SCAN -> {
                 PermissionGate(
                     permissions = PermissionUtils.cameraPermissions(),
-                    rationale = "Camera permission is needed to scan QR codes and barcodes."
+                    rationale = "扫描二维码和条形码需要相机权限。"
                 ) { QrScannerContent(viewModel) }
             }
             QrScreenTab.GENERATE -> QrGeneratorPanel(viewModel = viewModel)
@@ -132,13 +132,13 @@ private fun QrScannerContent(viewModel: QrScannerViewModel) {
         }
         Spacer(modifier = Modifier.height(8.dp))
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-            Text(text = "> QR Scanner", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+            Text(text = "> 二维码扫描器", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
             Button(onClick = { viewModel.toggleHistory() },
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-            ) { Text("History (${state.scanHistory.size})") }
+            ) { Text("历史记录（${state.scanHistory.size}）") }
         }
         Spacer(modifier = Modifier.height(8.dp))
         state.lastScan?.let { result -> QrResultCard(result = result) }
-            ?: Text(text = "Point camera at a QR code or barcode", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            ?: Text(text = "将相机对准二维码或条形码", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }

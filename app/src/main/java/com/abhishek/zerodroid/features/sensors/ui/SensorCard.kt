@@ -85,7 +85,7 @@ fun SensorCard(
         if (!reading.isAvailable) {
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "Sensor not available",
+                text = "传感器不可用",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

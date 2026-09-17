@@ -42,8 +42,8 @@ fun IrScreen(viewModel: IrViewModel = hiltViewModel()) {
         if (!state.isIrAvailable) {
             item {
                 TerminalCard {
-                    Text(text = "> IR blaster not detected", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    Text(text = "This device does not have an infrared transmitter", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(text = "> 未检测到红外发射器", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(text = "此设备没有红外发射器", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
         }
@@ -52,15 +52,15 @@ fun IrScreen(viewModel: IrViewModel = hiltViewModel()) {
             item {
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     FilterChip(selected = state.activeTab == IrScreenTab.REMOTE, onClick = { viewModel.setActiveTab(IrScreenTab.REMOTE) },
-                        label = { Text("Remote", style = MaterialTheme.typography.labelSmall) },
+                        label = { Text("遥控器", style = MaterialTheme.typography.labelSmall) },
                         leadingIcon = { Icon(imageVector = Icons.Default.SettingsRemote, contentDescription = null, modifier = Modifier.size(16.dp)) },
                         colors = FilterChipDefaults.filterChipColors(selectedContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f), selectedLabelColor = MaterialTheme.colorScheme.primary, selectedLeadingIconColor = MaterialTheme.colorScheme.primary))
                     FilterChip(selected = state.activeTab == IrScreenTab.CUSTOM, onClick = { viewModel.setActiveTab(IrScreenTab.CUSTOM) },
-                        label = { Text("Custom", style = MaterialTheme.typography.labelSmall) },
+                        label = { Text("自定义", style = MaterialTheme.typography.labelSmall) },
                         leadingIcon = { Icon(imageVector = Icons.Default.Code, contentDescription = null, modifier = Modifier.size(16.dp)) },
                         colors = FilterChipDefaults.filterChipColors(selectedContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f), selectedLabelColor = MaterialTheme.colorScheme.primary, selectedLeadingIconColor = MaterialTheme.colorScheme.primary))
                     FilterChip(selected = state.activeTab == IrScreenTab.IMPORT, onClick = { viewModel.setActiveTab(IrScreenTab.IMPORT) },
-                        label = { Text("Import", style = MaterialTheme.typography.labelSmall) },
+                        label = { Text("导入", style = MaterialTheme.typography.labelSmall) },
                         leadingIcon = { Icon(imageVector = Icons.Default.FileOpen, contentDescription = null, modifier = Modifier.size(16.dp)) },
                         colors = FilterChipDefaults.filterChipColors(selectedContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f), selectedLabelColor = MaterialTheme.colorScheme.primary, selectedLeadingIconColor = MaterialTheme.colorScheme.primary))
                 }
@@ -70,7 +70,7 @@ fun IrScreen(viewModel: IrViewModel = hiltViewModel()) {
                 IrScreenTab.REMOTE -> {
                     item {
                         Text(
-                            text = "Sends standard industry IR codes for the selected brand — there's no pairing or scanning, IR is one-way.",
+                            text = "发送所选品牌的标准行业红外码。红外通信是单向的，无需配对或扫描。",
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )

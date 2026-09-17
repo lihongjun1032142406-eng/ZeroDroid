@@ -37,7 +37,7 @@ fun UsbCameraScreen(
 ) {
     PermissionGate(
         permissions = PermissionUtils.cameraPermissions(),
-        rationale = "Camera permission is needed to preview external USB/UVC cameras."
+        rationale = "预览外接 USB/UVC 摄像头需要相机权限。"
     ) {
         UsbCameraContent(viewModel = viewModel)
     }
@@ -60,14 +60,14 @@ private fun UsbCameraContent(viewModel: UsbCameraViewModel) {
             Button(
                 onClick = { viewModel.refresh() },
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-            ) { Text("Rescan") }
+            ) { Text("重新扫描") }
         }
 
         // USB Video Class devices
         if (state.usbVideoDevices.isNotEmpty()) {
             item {
                 Text(
-                    text = "> USB Video Devices (${state.usbVideoDevices.size})",
+                    text = "> USB 视频设备（${state.usbVideoDevices.size}）",
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.primary
                 )
@@ -86,7 +86,7 @@ private fun UsbCameraContent(viewModel: UsbCameraViewModel) {
                     )
                     device.manufacturerName?.let {
                         Text(
-                            text = "Manufacturer: $it",
+                            text = "制造商：$it",
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -97,17 +97,17 @@ private fun UsbCameraContent(viewModel: UsbCameraViewModel) {
                             CircularProgressIndicator(modifier = Modifier.height(24.dp))
                         state.connectedVidPid == device.vidPid -> Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
-                                text = "Connected — interface claimed",
+                                text = "已连接 — 接口已占用",
                                 style = MaterialTheme.typography.labelSmall,
                                 color = TerminalGreen,
                                 modifier = Modifier.weight(1f)
                             )
-                            OutlinedButton(onClick = { viewModel.disconnect() }) { Text("Disconnect") }
+                            OutlinedButton(onClick = { viewModel.disconnect() }) { Text("断开") }
                         }
                         else -> Button(
                             onClick = { viewModel.connect(device) },
                             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-                        ) { Text("Connect") }
+                        ) { Text("连接") }
                     }
                 }
             }
@@ -127,7 +127,7 @@ private fun UsbCameraContent(viewModel: UsbCameraViewModel) {
         if (state.camera2ExternalCameras.isNotEmpty()) {
             item {
                 Text(
-                    text = "> Camera2 External Cameras",
+                    text = "> Camera2 外接摄像头",
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.primary
                 )
@@ -141,7 +141,7 @@ private fun UsbCameraContent(viewModel: UsbCameraViewModel) {
                 item {
                     TerminalCard {
                         Text(
-                            text = "> Preview",
+                            text = "> 预览",
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.primary
                         )
@@ -156,8 +156,8 @@ private fun UsbCameraContent(viewModel: UsbCameraViewModel) {
             item {
                 EmptyState(
                     icon = Icons.Default.Videocam,
-                    title = "No USB cameras detected",
-                    subtitle = "Connect a USB camera via OTG cable. Full UVC support requires native JNI libraries."
+                    title = "未检测到 USB 摄像头",
+                    subtitle = "请通过 OTG 线连接 USB 摄像头。完整 UVC 支持需要原生 JNI 库。"
                 )
             }
         }

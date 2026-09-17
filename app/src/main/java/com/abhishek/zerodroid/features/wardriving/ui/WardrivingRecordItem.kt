@@ -44,7 +44,7 @@ fun WardrivingRecordItem(
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = "${record.ssid ?: "<hidden>"} · ${record.bssid}",
+                    text = "${record.ssid ?: "<隐藏>"} · ${record.bssid}",
                     style = MaterialTheme.typography.labelSmall,
                     color = TextDim
                 )

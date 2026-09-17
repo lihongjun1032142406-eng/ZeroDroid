@@ -39,12 +39,12 @@ fun NfcWritePanel(
 
     TerminalCard(modifier = modifier) {
         Text(
-            text = "> Write NDEF",
+            text = "> 写入 NDEF",
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.primary
         )
         Text(
-            text = "Tap an NFC tag to write",
+            text = "将 NFC 标签靠近设备以写入",
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -53,7 +53,7 @@ fun NfcWritePanel(
         OutlinedTextField(
             value = textValue,
             onValueChange = { textValue = it },
-            label = { Text("Text content") },
+            label = { Text("文本内容") },
             colors = fieldColors,
             modifier = Modifier.fillMaxWidth()
         )
@@ -62,7 +62,7 @@ fun NfcWritePanel(
             enabled = textValue.isNotBlank(),
             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
             modifier = Modifier.fillMaxWidth()
-        ) { Text("Write Text") }
+        ) { Text("写入文本") }
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -79,12 +79,12 @@ fun NfcWritePanel(
             enabled = uriValue.isNotBlank(),
             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
             modifier = Modifier.fillMaxWidth()
-        ) { Text("Write URI") }
+        ) { Text("写入 URI") }
 
         writeResult?.let { result ->
             Spacer(modifier = Modifier.height(4.dp))
             val (text, color) = when (result) {
-                is WriteResult.Success -> "Written successfully" to MaterialTheme.colorScheme.primary
+                is WriteResult.Success -> "写入成功" to MaterialTheme.colorScheme.primary
                 is WriteResult.Error -> result.message to MaterialTheme.colorScheme.error
             }
             Text(text = text, style = MaterialTheme.typography.labelSmall, color = color)

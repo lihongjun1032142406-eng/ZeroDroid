@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.GraphicEq
 import androidx.compose.material.icons.filled.Speaker
@@ -57,12 +56,12 @@ fun UltrasonicScreen(viewModel: UltrasonicViewModel = hiltViewModel()) {
             Spacer(modifier = Modifier.height(4.dp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 FilterChip(selected = state.activeTab == UltrasonicScreenTab.DETECT, onClick = { viewModel.setActiveTab(UltrasonicScreenTab.DETECT) },
-                    label = { Text("Detect", style = MaterialTheme.typography.labelMedium) },
+                    label = { Text("检测", style = MaterialTheme.typography.labelMedium) },
                     leadingIcon = { Icon(imageVector = Icons.Default.GraphicEq, contentDescription = null, modifier = Modifier.size(16.dp)) },
                     colors = FilterChipDefaults.filterChipColors(selectedContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
                         selectedLabelColor = MaterialTheme.colorScheme.primary, selectedLeadingIconColor = MaterialTheme.colorScheme.primary))
                 FilterChip(selected = state.activeTab == UltrasonicScreenTab.GENERATE, onClick = { viewModel.setActiveTab(UltrasonicScreenTab.GENERATE) },
-                    label = { Text("Generate", style = MaterialTheme.typography.labelMedium) },
+                    label = { Text("生成", style = MaterialTheme.typography.labelMedium) },
                     leadingIcon = { Icon(imageVector = Icons.Default.Speaker, contentDescription = null, modifier = Modifier.size(16.dp)) },
                     colors = FilterChipDefaults.filterChipColors(selectedContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
                         selectedLabelColor = MaterialTheme.colorScheme.primary, selectedLeadingIconColor = MaterialTheme.colorScheme.primary))
@@ -73,7 +72,7 @@ fun UltrasonicScreen(viewModel: UltrasonicViewModel = hiltViewModel()) {
             UltrasonicScreenTab.DETECT -> {
                 item {
                     PermissionGate(permissions = PermissionUtils.audioPermissions(),
-                        rationale = "Microphone permission is needed to analyze ultrasonic frequencies."
+                        rationale = "分析超声波频率需要麦克风权限。"
                     ) { UltrasonicDetectContent(viewModel) }
                 }
             }
@@ -93,17 +92,17 @@ private fun UltrasonicDetectContent(viewModel: UltrasonicViewModel) {
     val state by viewModel.state.collectAsState()
 
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-        Text(text = "> Ultrasonic (18-24kHz)", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary, modifier = Modifier.weight(1f))
+        Text(text = "> 超声波（18-24 kHz）", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary, modifier = Modifier.weight(1f))
         if (state.isRecording) {
-            OutlinedButton(onClick = { viewModel.stopAnalysis() }, colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error)) { Text("Stop", maxLines = 1, softWrap = false) }
+            OutlinedButton(onClick = { viewModel.stopAnalysis() }, colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error)) { Text("停止", maxLines = 1, softWrap = false) }
         } else {
-            Button(onClick = { viewModel.startAnalysis() }, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)) { Text("Analyze", maxLines = 1, softWrap = false) }
+            Button(onClick = { viewModel.startAnalysis() }, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)) { Text("分析", maxLines = 1, softWrap = false) }
         }
     }
     Spacer(modifier = Modifier.height(8.dp))
     state.error?.let { Text(text = it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error); Spacer(modifier = Modifier.height(8.dp)) }
     TerminalCard {
-        Text(text = "> Frequency Spectrum", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+        Text(text = "> 频谱", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
         Spacer(modifier = Modifier.height(4.dp))
         SpectrumChart(bins = state.spectrumData)
         Spacer(modifier = Modifier.height(4.dp))
@@ -115,11 +114,11 @@ private fun UltrasonicDetectContent(viewModel: UltrasonicViewModel) {
     }
     if (state.peakFrequency > 0) {
         Spacer(modifier = Modifier.height(8.dp))
-        TerminalCard { Text(text = "Peak: %.1f Hz (%.4f)".format(state.peakFrequency, state.peakMagnitude), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurface) }
+        TerminalCard { Text(text = "峰值：%.1f Hz（%.4f）".format(state.peakFrequency, state.peakMagnitude), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurface) }
     }
     if (state.detectedBeacons.isNotEmpty()) {
         Spacer(modifier = Modifier.height(8.dp))
-        Text(text = "> Beacons Detected (${state.detectedBeacons.size})", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.error)
+        Text(text = "> 检测到信标（${state.detectedBeacons.size}）", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.error)
         Spacer(modifier = Modifier.height(4.dp))
         state.detectedBeacons.forEach { beacon -> BeaconAlertCard(beacon = beacon); Spacer(modifier = Modifier.height(4.dp)) }
     }

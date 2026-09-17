@@ -20,57 +20,24 @@ import com.abhishek.zerodroid.features.sdr.domain.SdrDeviceInfo
 import com.abhishek.zerodroid.ui.theme.TerminalGreen
 
 @Composable
-fun SdrDeviceCard(
-    device: SdrDeviceInfo,
-    isConnecting: Boolean,
-    isConnected: Boolean,
-    onConnect: () -> Unit,
-    onDisconnect: () -> Unit,
-    modifier: Modifier = Modifier
-) {
+fun SdrDeviceCard(device: SdrDeviceInfo, isConnecting: Boolean, isConnected: Boolean, onConnect: () -> Unit, onDisconnect: () -> Unit, modifier: Modifier = Modifier) {
     TerminalCard(modifier = modifier) {
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = device.chipset,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Text(
-                    text = "VID:PID ${device.vidPid}",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.primary
-                )
-                Text(
-                    text = device.deviceName,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                Text(text = device.chipset, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
+                Text(text = "VID:PID ${device.vidPid}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
+                Text(text = device.deviceName, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
-            if (device.isRtlSdr) {
-                Text(
-                    text = "RTL-SDR",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = TerminalGreen
-                )
-            }
+            if (device.isRtlSdr) Text(text = "RTL-SDR", style = MaterialTheme.typography.labelSmall, color = TerminalGreen)
         }
         Spacer(modifier = Modifier.height(8.dp))
         when {
             isConnecting -> CircularProgressIndicator(modifier = Modifier.height(24.dp))
             isConnected -> Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = "Connected — interface claimed",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = TerminalGreen,
-                    modifier = Modifier.weight(1f)
-                )
-                OutlinedButton(onClick = onDisconnect) { Text("Disconnect") }
+                Text(text = "已连接 — 接口已占用", style = MaterialTheme.typography.labelSmall, color = TerminalGreen, modifier = Modifier.weight(1f))
+                OutlinedButton(onClick = onDisconnect) { Text("断开连接") }
             }
-            else -> Button(
-                onClick = onConnect,
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-            ) { Text("Connect") }
+            else -> Button(onClick = onConnect, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)) { Text("连接") }
         }
     }
 }

@@ -38,7 +38,7 @@ fun UsbScreen(
             StatusIndicator(isAvailable = viewModel.hasUsbHost)
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "> ${state.devices.size} USB device(s) connected",
+                text = "> 已连接 ${state.devices.size} 个 USB 设备",
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.primary
             )
@@ -48,8 +48,8 @@ fun UsbScreen(
             item {
                 EmptyState(
                     icon = Icons.Default.Usb,
-                    title = "No USB devices detected",
-                    subtitle = "Connect a USB device via OTG cable"
+                    title = "未检测到 USB 设备",
+                    subtitle = "请通过 OTG 线连接 USB 设备"
                 )
             }
         }

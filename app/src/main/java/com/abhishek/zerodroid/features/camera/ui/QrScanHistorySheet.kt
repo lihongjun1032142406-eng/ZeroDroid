@@ -19,35 +19,12 @@ import com.abhishek.zerodroid.features.camera.domain.QrScanResult
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun QrScanHistorySheet(
-    history: List<QrScanResult>,
-    onDismiss: () -> Unit
-) {
+fun QrScanHistorySheet(history: List<QrScanResult>, onDismiss: () -> Unit) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-
-    ModalBottomSheet(
-        onDismissRequest = onDismiss,
-        sheetState = sheetState,
-        containerColor = MaterialTheme.colorScheme.surfaceVariant
-    ) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            item {
-                Text(
-                    text = "> Scan History (${history.size})",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
-
-            items(history) { result ->
-                QrResultCard(result = result)
-            }
-
+    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheetState, containerColor = MaterialTheme.colorScheme.surfaceVariant) {
+        LazyColumn(modifier = Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            item { Text(text = "> 扫描历史（${history.size}）", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary) }
+            items(history) { result -> QrResultCard(result = result) }
             item { Spacer(modifier = Modifier.height(32.dp)) }
         }
     }

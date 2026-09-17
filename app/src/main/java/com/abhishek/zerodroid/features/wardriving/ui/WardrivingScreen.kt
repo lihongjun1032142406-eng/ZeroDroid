@@ -35,7 +35,7 @@ fun WardrivingScreen(
 ) {
     PermissionGate(
         permissions = PermissionUtils.wardrivingPermissions(),
-        rationale = "Location and Bluetooth permissions are needed to log WiFi networks with GPS coordinates."
+        rationale = "需要位置和蓝牙权限，才能记录带 GPS 坐标的 Wi-Fi 网络。"
     ) {
         WardrivingContent(viewModel)
     }
@@ -60,7 +60,7 @@ private fun WardrivingContent(viewModel: WardrivingViewModel) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "> Wardriving",
+                    text = "> 无线网络测绘",
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.primary,
                     maxLines = 1,
@@ -75,13 +75,13 @@ private fun WardrivingContent(viewModel: WardrivingViewModel) {
                             onClick = { viewModel.stopSession() },
                             contentPadding = PaddingValues(horizontal = 14.dp),
                             colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error)
-                        ) { Text("Stop", maxLines = 1, softWrap = false) }
+                        ) { Text("停止", maxLines = 1, softWrap = false) }
                     } else {
                         Button(
                             onClick = { viewModel.startSession() },
                             contentPadding = PaddingValues(horizontal = 14.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-                        ) { Text("Start", maxLines = 1, softWrap = false) }
+                        ) { Text("开始", maxLines = 1, softWrap = false) }
                     }
 
                     if (state.session != null && !state.isScanning) {
@@ -94,12 +94,12 @@ private fun WardrivingContent(viewModel: WardrivingViewModel) {
                                         putExtra(Intent.EXTRA_SUBJECT, "wardriving_export.csv")
                                         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                                     }
-                                    context.startActivity(Intent.createChooser(intent, "Export CSV"))
+                                    context.startActivity(Intent.createChooser(intent, "导出 CSV"))
                                 }
                             },
                             contentPadding = PaddingValues(horizontal = 14.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-                        ) { Text("Export", maxLines = 1, softWrap = false) }
+                        ) { Text("导出", maxLines = 1, softWrap = false) }
                     }
                 }
             }
@@ -130,7 +130,7 @@ private fun WardrivingContent(viewModel: WardrivingViewModel) {
         if (state.records.isNotEmpty()) {
             item {
                 Text(
-                    text = "> Recent Records",
+                    text = "> 最近记录",
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.primary
                 )

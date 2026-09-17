@@ -89,7 +89,7 @@ fun HiddenCameraScreen(
 ) {
     PermissionGate(
         permissions = PermissionUtils.hiddenCameraPermissions(),
-        rationale = "Camera, WiFi, Bluetooth, and location permissions are needed to detect hidden cameras using multiple sensor methods."
+        rationale = "使用多种传感器方式检测隐藏摄像头需要相机、WiFi、蓝牙和位置权限。"
     ) {
         HiddenCameraContent(viewModel)
     }
@@ -116,44 +116,28 @@ private fun HiddenCameraContent(viewModel: HiddenCameraViewModel) {
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         item { Spacer(modifier = Modifier.height(4.dp)) }
-
-        // 1. Scan Controls
         item { ScanControls(state, viewModel) }
-
-        // 2. IR Camera Preview (when active)
-        if (state.irActive) {
-            item { IrCameraSection(viewModel) }
-        }
-
-        // 3. Threat Summary
-        if (state.detections.isNotEmpty() || state.isScanning) {
-            item { ThreatSummary(state) }
-        }
-
-        // 4. Mode Status Cards
+        if (state.irActive) { item { IrCameraSection(viewModel) } }
+        if (state.detections.isNotEmpty() || state.isScanning) { item { ThreatSummary(state) } }
         item { ModeStatusRow(state) }
 
-        // 5. Detection Results
         if (state.detections.isEmpty() && !state.isScanning) {
             item {
                 EmptyState(
                     icon = Icons.Default.Shield,
-                    title = "No threats detected",
-                    subtitle = "Tap SCAN to sweep for hidden cameras using WiFi, BLE, and magnetic sensors"
+                    title = "未检测到威胁",
+                    subtitle = "点击“扫描”，使用 WiFi、BLE 和磁场传感器搜索隐藏摄像头"
                 )
             }
         }
 
-        items(state.detections, key = { it.id }) { detection ->
-            DetectionCard(detection)
-        }
+        items(state.detections, key = { it.id }) { detection -> DetectionCard(detection) }
 
-        // Error display
         state.error?.let { error ->
             item {
                 TerminalCard(glowColor = TerminalRed, borderColor = TerminalRed) {
                     Text(
-                        text = "> ERROR: $error",
+                        text = "> 错误：$error",
                         color = TerminalRed,
                         fontFamily = FontFamily.Monospace,
                         fontSize = 12.sp,
@@ -162,7 +146,6 @@ private fun HiddenCameraContent(viewModel: HiddenCameraViewModel) {
                 }
             }
         }
-
         item { Spacer(modifier = Modifier.height(16.dp)) }
     }
 }
@@ -175,12 +158,9 @@ private fun ScanControls(state: HiddenCameraScanState, viewModel: HiddenCameraVi
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Main scan button
             Button(
                 onClick = { if (state.isScanning) viewModel.stopScan() else viewModel.startScan() },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = if (state.isScanning) TerminalRed else TerminalGreen
-                ),
+                colors = ButtonDefaults.buttonColors(containerColor = if (state.isScanning) TerminalRed else TerminalGreen),
                 modifier = Modifier.weight(1f)
             ) {
                 Icon(
@@ -190,95 +170,48 @@ private fun ScanControls(state: HiddenCameraScanState, viewModel: HiddenCameraVi
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = if (state.isScanning) "STOP" else "SCAN",
+                    text = if (state.isScanning) "停止" else "扫描",
                     color = Color.Black,
                     fontWeight = FontWeight.Bold,
                     fontFamily = FontFamily.Monospace
                 )
             }
-
             if (state.detections.isNotEmpty()) {
                 Spacer(modifier = Modifier.width(8.dp))
                 IconButton(onClick = { viewModel.clearDetections() }) {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = "Clear detections",
-                        tint = TextSecondary
-                    )
+                    Icon(Icons.Default.Delete, contentDescription = "清除检测结果", tint = TextSecondary)
                 }
             }
         }
 
-        // Mode toggle chips
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .horizontalScroll(rememberScrollState()),
+            modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            ModeChip(
-                label = "IR",
-                icon = Icons.Default.CameraAlt,
-                active = state.irActive,
-                count = null,
-                onClick = { if (state.irActive) viewModel.stopIrMode() else viewModel.startIrMode() }
-            )
-            ModeChip(
-                label = "WiFi",
-                icon = Icons.Default.Wifi,
-                active = state.isScanning,
-                count = state.wifiSuspects.takeIf { it > 0 }
-            )
-            ModeChip(
-                label = "BLE",
-                icon = Icons.Default.Bluetooth,
-                active = state.isScanning,
-                count = state.bleSuspects.takeIf { it > 0 }
-            )
-            ModeChip(
-                label = "Magnetic",
-                icon = Icons.Default.Explore,
-                active = state.isScanning,
-                count = if (state.magneticAnomaly) 1 else null
-            )
-            ModeChip(
-                label = "Network",
-                icon = Icons.Default.Lan,
-                active = state.networkScanProgress != null,
-                count = state.networkSuspects.takeIf { it > 0 },
-                onClick = { viewModel.startNetworkScan() }
-            )
+            ModeChip("IR", Icons.Default.CameraAlt, state.irActive, null) {
+                if (state.irActive) viewModel.stopIrMode() else viewModel.startIrMode()
+            }
+            ModeChip("WiFi", Icons.Default.Wifi, state.isScanning, state.wifiSuspects.takeIf { it > 0 })
+            ModeChip("BLE", Icons.Default.Bluetooth, state.isScanning, state.bleSuspects.takeIf { it > 0 })
+            ModeChip("磁场", Icons.Default.Explore, state.isScanning, if (state.magneticAnomaly) 1 else null)
+            ModeChip("网络", Icons.Default.Lan, state.networkScanProgress != null, state.networkSuspects.takeIf { it > 0 }) {
+                viewModel.startNetworkScan()
+            }
         }
     }
 }
 
 @Composable
-private fun ModeChip(
-    label: String,
-    icon: ImageVector,
-    active: Boolean,
-    count: Int?,
-    onClick: (() -> Unit)? = null
-) {
+private fun ModeChip(label: String, icon: ImageVector, active: Boolean, count: Int?, onClick: (() -> Unit)? = null) {
     FilterChip(
         selected = active,
         onClick = { onClick?.invoke() },
         label = {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = if (count != null) "$label ($count)" else label,
-                    fontFamily = FontFamily.Monospace,
-                    fontSize = 12.sp
-                )
+                Text(if (count != null) "$label ($count)" else label, fontFamily = FontFamily.Monospace, fontSize = 12.sp)
             }
         },
-        leadingIcon = {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                modifier = Modifier.size(16.dp)
-            )
-        },
+        leadingIcon = { Icon(icon, contentDescription = null, modifier = Modifier.size(16.dp)) },
         colors = FilterChipDefaults.filterChipColors(
             selectedContainerColor = TerminalGreen.copy(alpha = 0.15f),
             selectedLabelColor = TerminalGreen,
@@ -292,22 +225,15 @@ private fun IrCameraSection(viewModel: HiddenCameraViewModel) {
     TerminalCard(glowColor = TerminalCyan, borderColor = TerminalCyan) {
         Column(modifier = Modifier.padding(8.dp)) {
             Text(
-                text = "> IR Camera Mode",
+                text = "> IR 摄像头模式",
                 color = TerminalCyan,
                 fontFamily = FontFamily.Monospace,
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(4f / 3f)
-                    .clip(RoundedCornerShape(8.dp))
-            ) {
-                IrCameraView(
-                    onIrDetected = { detection -> viewModel.addIrDetection(detection) }
-                )
+            Box(modifier = Modifier.fillMaxWidth().aspectRatio(4f / 3f).clip(RoundedCornerShape(8.dp))) {
+                IrCameraView(onIrDetected = { detection -> viewModel.addIrDetection(detection) })
             }
         }
     }
@@ -319,21 +245,15 @@ private fun ThreatSummary(state: HiddenCameraScanState) {
     val mediumCount = state.detections.count { it.threatLevel == ThreatLevel.MEDIUM }
     val lowCount = state.detections.count { it.threatLevel == ThreatLevel.LOW }
     val total = state.detections.size
-
     val summaryColor = when {
         highCount > 0 -> TerminalRed
         mediumCount > 0 -> TerminalAmber
         total > 0 -> TerminalCyan
         else -> TerminalGreen
     }
-
     val animatedColor by animateColorAsState(targetValue = summaryColor, label = "summaryColor")
 
-    TerminalCard(
-        glowColor = animatedColor,
-        borderColor = animatedColor,
-        animated = highCount > 0
-    ) {
+    TerminalCard(glowColor = animatedColor, borderColor = animatedColor, animated = highCount > 0) {
         Column(modifier = Modifier.padding(12.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -341,35 +261,25 @@ private fun ThreatSummary(state: HiddenCameraScanState) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = if (total == 0) "> Scanning..." else "> $total Threat${if (total != 1) "s" else ""} Found",
+                    text = if (total == 0) "> 正在扫描..." else "> 已发现 $total 个威胁",
                     color = animatedColor,
                     fontFamily = FontFamily.Monospace,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp
                 )
-                if (state.isScanning) {
-                    ScanningIndicator(isScanning = true, label = "", color = animatedColor)
-                }
+                if (state.isScanning) ScanningIndicator(isScanning = true, label = "", color = animatedColor)
             }
-
             if (total > 0) {
                 Spacer(modifier = Modifier.height(4.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    if (highCount > 0) ThreatBadge("HIGH: $highCount", TerminalRed)
-                    if (mediumCount > 0) ThreatBadge("MED: $mediumCount", TerminalAmber)
-                    if (lowCount > 0) ThreatBadge("LOW: $lowCount", TerminalCyan)
+                    if (highCount > 0) ThreatBadge("高：$highCount", TerminalRed)
+                    if (mediumCount > 0) ThreatBadge("中：$mediumCount", TerminalAmber)
+                    if (lowCount > 0) ThreatBadge("低：$lowCount", TerminalCyan)
                 }
             }
-
-            // Network scan progress
             state.networkScanProgress?.let { progress ->
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = progress,
-                    color = TextSecondary,
-                    fontFamily = FontFamily.Monospace,
-                    fontSize = 11.sp
-                )
+                Text(progress, color = TextSecondary, fontFamily = FontFamily.Monospace, fontSize = 11.sp)
             }
         }
     }
@@ -377,55 +287,24 @@ private fun ThreatSummary(state: HiddenCameraScanState) {
 
 @Composable
 private fun ThreatBadge(label: String, color: Color) {
-    Text(
-        text = "[$label]",
-        color = color,
-        fontFamily = FontFamily.Monospace,
-        fontSize = 11.sp,
-        fontWeight = FontWeight.Bold
-    )
+    Text("[$label]", color = color, fontFamily = FontFamily.Monospace, fontSize = 11.sp, fontWeight = FontWeight.Bold)
 }
 
 @Composable
 private fun ModeStatusRow(state: HiddenCameraScanState) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .horizontalScroll(rememberScrollState()),
+        modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
+        ModeStatusCard("IR", if (state.irActive) "活动" else "就绪", state.irActive, if (state.irActive) TerminalCyan else TextSecondary)
+        ModeStatusCard("WiFi", if (state.isScanning) "${state.wifiSuspects} 个可疑" else "空闲", state.isScanning, if (state.wifiSuspects > 0) TerminalAmber else if (state.isScanning) TerminalGreen else TextSecondary)
+        ModeStatusCard("BLE", if (state.isScanning) "${state.bleSuspects} 个可疑" else "空闲", state.isScanning, if (state.bleSuspects > 0) TerminalAmber else if (state.isScanning) TerminalGreen else TextSecondary)
+        ModeStatusCard("磁场", if (state.magneticAnomaly) "异常" else if (state.isScanning) "正常" else "空闲", state.isScanning, if (state.magneticAnomaly) TerminalRed else if (state.isScanning) TerminalGreen else TextSecondary)
         ModeStatusCard(
-            label = "IR",
-            status = if (state.irActive) "Active" else "Ready",
-            isActive = state.irActive,
-            color = if (state.irActive) TerminalCyan else TextSecondary
-        )
-        ModeStatusCard(
-            label = "WiFi",
-            status = if (state.isScanning) "${state.wifiSuspects} suspects" else "Idle",
-            isActive = state.isScanning,
-            color = if (state.wifiSuspects > 0) TerminalAmber else if (state.isScanning) TerminalGreen else TextSecondary
-        )
-        ModeStatusCard(
-            label = "BLE",
-            status = if (state.isScanning) "${state.bleSuspects} suspects" else "Idle",
-            isActive = state.isScanning,
-            color = if (state.bleSuspects > 0) TerminalAmber else if (state.isScanning) TerminalGreen else TextSecondary
-        )
-        ModeStatusCard(
-            label = "MAG",
-            status = if (state.magneticAnomaly) "ANOMALY" else if (state.isScanning) "Normal" else "Idle",
-            isActive = state.isScanning,
-            color = if (state.magneticAnomaly) TerminalRed else if (state.isScanning) TerminalGreen else TextSecondary
-        )
-        ModeStatusCard(
-            label = "NET",
-            status = state.networkScanProgress?.substringAfterLast(" ")
-                ?: if (state.networkSuspects > 0) "${state.networkSuspects} found" else "Idle",
-            isActive = state.networkScanProgress != null,
-            color = if (state.networkSuspects > 0) TerminalAmber
-                else if (state.networkScanProgress != null) TerminalGreen
-                else TextSecondary
+            "网络",
+            state.networkScanProgress?.substringAfterLast(" ") ?: if (state.networkSuspects > 0) "发现 ${state.networkSuspects} 个" else "空闲",
+            state.networkScanProgress != null,
+            if (state.networkSuspects > 0) TerminalAmber else if (state.networkScanProgress != null) TerminalGreen else TextSecondary
         )
     }
 }
@@ -433,41 +312,16 @@ private fun ModeStatusRow(state: HiddenCameraScanState) {
 @Composable
 private fun ModeStatusCard(label: String, status: String, isActive: Boolean, color: Color) {
     Column(
-        modifier = Modifier
-            .width(80.dp)
-            .background(SurfaceVariantDark, RoundedCornerShape(8.dp))
-            .border(1.dp, color.copy(alpha = 0.3f), RoundedCornerShape(8.dp))
-            .padding(8.dp),
+        modifier = Modifier.width(80.dp).background(SurfaceVariantDark, RoundedCornerShape(8.dp))
+            .border(1.dp, color.copy(alpha = 0.3f), RoundedCornerShape(8.dp)).padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(6.dp)
-                    .background(
-                        if (isActive) color else TextSecondary.copy(alpha = 0.5f),
-                        CircleShape
-                    )
-            )
-            Text(
-                text = label,
-                color = color,
-                fontFamily = FontFamily.Monospace,
-                fontSize = 11.sp,
-                fontWeight = FontWeight.Bold
-            )
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            Box(modifier = Modifier.size(6.dp).background(if (isActive) color else TextSecondary.copy(alpha = 0.5f), CircleShape))
+            Text(label, color = color, fontFamily = FontFamily.Monospace, fontSize = 11.sp, fontWeight = FontWeight.Bold)
         }
         Spacer(modifier = Modifier.height(2.dp))
-        Text(
-            text = status,
-            color = color.copy(alpha = 0.8f),
-            fontFamily = FontFamily.Monospace,
-            fontSize = 9.sp,
-            maxLines = 1
-        )
+        Text(status, color = color.copy(alpha = 0.8f), fontFamily = FontFamily.Monospace, fontSize = 9.sp, maxLines = 1)
     }
 }
 
@@ -478,13 +332,17 @@ private fun DetectionCard(detection: CameraDetection) {
         ThreatLevel.MEDIUM -> TerminalAmber
         ThreatLevel.LOW -> TerminalCyan
     }
-
     val sourceBadge = when (detection.source) {
         DetectionSource.IR -> "IR"
         DetectionSource.WIFI -> "WiFi"
         DetectionSource.BLE -> "BLE"
-        DetectionSource.MAGNETIC -> "MAG"
-        DetectionSource.NETWORK -> "NET"
+        DetectionSource.MAGNETIC -> "磁场"
+        DetectionSource.NETWORK -> "网络"
+    }
+    val threatLabel = when (detection.threatLevel) {
+        ThreatLevel.HIGH -> "高"
+        ThreatLevel.MEDIUM -> "中"
+        ThreatLevel.LOW -> "低"
     }
 
     TerminalCard(glowColor = color, borderColor = color) {
@@ -499,18 +357,14 @@ private fun DetectionCard(detection: CameraDetection) {
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.weight(1f)
                 ) {
-                    // Source badge
                     Text(
                         text = "[$sourceBadge]",
                         color = color,
                         fontFamily = FontFamily.Monospace,
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier
-                            .background(color.copy(alpha = 0.15f), RoundedCornerShape(4.dp))
-                            .padding(horizontal = 6.dp, vertical = 2.dp)
+                        modifier = Modifier.background(color.copy(alpha = 0.15f), RoundedCornerShape(4.dp)).padding(horizontal = 6.dp, vertical = 2.dp)
                     )
-                    // Title
                     Text(
                         text = detection.title,
                         color = color,
@@ -522,9 +376,8 @@ private fun DetectionCard(detection: CameraDetection) {
                         modifier = Modifier.weight(1f, fill = false)
                     )
                 }
-                // Threat level
                 Text(
-                    text = detection.threatLevel.name,
+                    text = threatLabel,
                     color = color,
                     fontFamily = FontFamily.Monospace,
                     fontSize = 10.sp,
@@ -534,33 +387,14 @@ private fun DetectionCard(detection: CameraDetection) {
                     modifier = Modifier.padding(start = 8.dp)
                 )
             }
-
             Spacer(modifier = Modifier.height(4.dp))
-
-            // Detail
-            Text(
-                text = detection.detail,
-                color = TextSecondary,
-                fontFamily = FontFamily.Monospace,
-                fontSize = 11.sp
-            )
-
-            // Signal strength + timestamp
+            Text(detection.detail, color = TextSecondary, fontFamily = FontFamily.Monospace, fontSize = 11.sp)
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 4.dp),
+                modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                detection.rssi?.let { rssi ->
-                    SignalBar(rssi = rssi, color = color)
-                }
-                Text(
-                    text = formatTime(detection.timestamp),
-                    color = TextSecondary.copy(alpha = 0.6f),
-                    fontFamily = FontFamily.Monospace,
-                    fontSize = 10.sp
-                )
+                detection.rssi?.let { rssi -> SignalBar(rssi, color) }
+                Text(formatTime(detection.timestamp), color = TextSecondary.copy(alpha = 0.6f), fontFamily = FontFamily.Monospace, fontSize = 10.sp)
             }
         }
     }
@@ -574,26 +408,13 @@ private fun SignalBar(rssi: Int, color: Color) {
         rssi >= -75 -> 2
         else -> 1
     }
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(2.dp),
-        verticalAlignment = Alignment.Bottom
-    ) {
-        Text(
-            text = "${rssi}dBm",
-            color = TextSecondary,
-            fontFamily = FontFamily.Monospace,
-            fontSize = 10.sp
-        )
+    Row(horizontalArrangement = Arrangement.spacedBy(2.dp), verticalAlignment = Alignment.Bottom) {
+        Text("${rssi}dBm", color = TextSecondary, fontFamily = FontFamily.Monospace, fontSize = 10.sp)
         Spacer(modifier = Modifier.width(4.dp))
         for (i in 1..4) {
             Box(
-                modifier = Modifier
-                    .width(4.dp)
-                    .height((4 + i * 3).dp)
-                    .background(
-                        if (i <= bars) color else color.copy(alpha = 0.2f),
-                        RoundedCornerShape(1.dp)
-                    )
+                modifier = Modifier.width(4.dp).height((4 + i * 3).dp)
+                    .background(if (i <= bars) color else color.copy(alpha = 0.2f), RoundedCornerShape(1.dp))
             )
         }
     }

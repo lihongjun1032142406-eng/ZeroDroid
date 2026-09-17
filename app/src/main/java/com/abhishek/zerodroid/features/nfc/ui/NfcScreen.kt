@@ -45,7 +45,7 @@ fun NfcScreen(
             item {
                 TerminalCard {
                     Text(
-                        text = "> NFC not available on this device",
+                        text = "> 此设备不支持 NFC",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -55,7 +55,7 @@ fun NfcScreen(
             item {
                 TerminalCard {
                     Text(
-                        text = "> NFC is disabled. Enable it in Settings.",
+                        text = "> NFC 已关闭，请在系统设置中开启。",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.error
                     )
@@ -71,7 +71,7 @@ fun NfcScreen(
                 FilterChip(
                     selected = !state.writeMode,
                     onClick = { viewModel.setWriteMode(false) },
-                    label = { Text("Read") },
+                    label = { Text("读取") },
                     colors = FilterChipDefaults.filterChipColors(
                         selectedContainerColor = MaterialTheme.colorScheme.primary,
                         selectedLabelColor = MaterialTheme.colorScheme.onPrimary
@@ -80,7 +80,7 @@ fun NfcScreen(
                 FilterChip(
                     selected = state.writeMode,
                     onClick = { viewModel.setWriteMode(true) },
-                    label = { Text("Write") },
+                    label = { Text("写入") },
                     colors = FilterChipDefaults.filterChipColors(
                         selectedContainerColor = MaterialTheme.colorScheme.primary,
                         selectedLabelColor = MaterialTheme.colorScheme.onPrimary
@@ -101,7 +101,7 @@ fun NfcScreen(
             state.lastTag?.let { tag ->
                 item {
                     Text(
-                        text = "> Last Scanned Tag",
+                        text = "> 最近扫描的标签",
                         style = MaterialTheme.typography.labelLarge,
                         color = MaterialTheme.colorScheme.primary
                     )
@@ -114,11 +114,11 @@ fun NfcScreen(
                     TerminalCard(animated = true) {
                         ScanningIndicator(
                             isScanning = true,
-                            label = "Waiting for NFC tag..."
+                            label = "正在等待 NFC 标签…"
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = "Hold an NFC tag near the back of your device",
+                            text = "请将 NFC 标签靠近设备背面",
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -129,7 +129,7 @@ fun NfcScreen(
             if (state.tagHistory.isNotEmpty()) {
                 item {
                     Text(
-                        text = "> Tag History (${state.tagHistory.size})",
+                        text = "> 标签历史（${state.tagHistory.size}）",
                         style = MaterialTheme.typography.labelLarge,
                         color = MaterialTheme.colorScheme.primary
                     )

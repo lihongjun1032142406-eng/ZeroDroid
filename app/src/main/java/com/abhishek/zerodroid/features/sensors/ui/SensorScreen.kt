@@ -68,10 +68,10 @@ fun SensorScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                SectionHeader(title = if (isMonitoring) "> Monitoring" else "> Idle")
+                SectionHeader(title = if (isMonitoring) "> 监测中" else "> 待机")
                 if (isMonitoring) {
                     OutlinedButton(onClick = { viewModel.toggleMonitoring() }) {
-                        Text("Stop")
+                        Text("停止")
                     }
                 } else {
                     Button(
@@ -81,7 +81,7 @@ fun SensorScreen(
                             contentColor = TerminalGreen
                         )
                     ) {
-                        Text("Monitor")
+                        Text("开始监测")
                     }
                 }
             }
@@ -91,26 +91,26 @@ fun SensorScreen(
             item {
                 EmptyState(
                     icon = Icons.Default.Sensors,
-                    title = "Sensors Idle",
-                    subtitle = "Tap Monitor to start reading sensor data.\nAuto-stops after 60 seconds."
+                    title = "传感器待机",
+                    subtitle = "点击“开始监测”读取传感器数据。\n60 秒后自动停止。"
                 )
             }
         } else {
             // --- Motion ---
-            item { SectionHeader(title = "> Motion") }
+            item { SectionHeader(title = "> 运动") }
             item { SensorCard(reading = accelerometer) }
             item { LevelMeterView(tiltState = tiltState) }
             item { VibrationDetectorView(state = vibrationState, onReset = { viewModel.resetVibrationPeak() }) }
             item { SensorCard(reading = gyroscope) }
 
             // --- Magnetic ---
-            item { SectionHeader(title = "> Magnetic") }
+            item { SectionHeader(title = "> 磁场") }
             item { SensorCard(reading = magnetometer) }
             item { CompassView(heading = compassHeading) }
             item { MetalDetectorView(state = metalDetector, onReset = { viewModel.resetMetalDetector() }) }
 
             // --- Environment ---
-            item { SectionHeader(title = "> Environment") }
+            item { SectionHeader(title = "> 环境") }
             item {
                 TerminalCard {
                     Row(
@@ -119,13 +119,13 @@ fun SensorScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "> Barometer",
+                            text = "> 气压计",
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.primary
                         )
                         if (barometer.isAvailable) {
                             Text(
-                                text = "${String.format(Locale.US, "%.1f", floorState.pressureHpa)} hPa \u00B7 ${String.format(Locale.US, "%.1f", floorState.altitudeM)}m \u00B7 Floor ${floorState.estimatedFloor}",
+                                text = "${String.format(Locale.US, "%.1f", floorState.pressureHpa)} hPa · ${String.format(Locale.US, "%.1f", floorState.altitudeM)}m · 楼层 ${floorState.estimatedFloor}",
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurface
                             )
@@ -133,7 +133,7 @@ fun SensorScreen(
                     }
                     if (!barometer.isAvailable) {
                         Text(
-                            text = "Sensor not available",
+                            text = "传感器不可用",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )

@@ -23,14 +23,14 @@ fun UsbCameraInfoCard(
             color = MaterialTheme.colorScheme.onSurface
         )
         Text(
-            text = "Camera ID: ${camera.cameraId} | External: ${camera.isExternal}",
+            text = "摄像头 ID：${camera.cameraId} | 外接：${if (camera.isExternal) "是" else "否"}",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.primary
         )
         if (camera.resolutions.isNotEmpty()) {
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "Resolutions: ${camera.resolutions.take(5).joinToString(", ")}",
+                text = "分辨率：${camera.resolutions.take(5).joinToString(", ")}",
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

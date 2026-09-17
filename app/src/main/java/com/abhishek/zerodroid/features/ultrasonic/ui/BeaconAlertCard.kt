@@ -29,23 +29,23 @@ fun BeaconAlertCard(
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
             Text(
-                text = "Ultrasonic Beacon Detected",
+                text = "检测到超声波信标",
                 style = MaterialTheme.typography.titleMedium,
                 color = TerminalRed
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "Center: %.1f Hz".format(beacon.centerFrequencyHz),
+                text = "中心频率：%.1f Hz".format(beacon.centerFrequencyHz),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurface
             )
             Text(
-                text = "Bandwidth: %.1f Hz".format(beacon.bandwidth),
+                text = "带宽：%.1f Hz".format(beacon.bandwidth),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Text(
-                text = "Magnitude: %.4f".format(beacon.magnitude),
+                text = "幅度：%.4f".format(beacon.magnitude),
                 style = MaterialTheme.typography.labelSmall,
                 color = TerminalAmber
             )

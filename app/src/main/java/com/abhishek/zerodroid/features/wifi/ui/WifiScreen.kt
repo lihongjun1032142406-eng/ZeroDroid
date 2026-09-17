@@ -37,15 +37,11 @@ import com.abhishek.zerodroid.features.wifi.viewmodel.WifiViewModel
 import com.abhishek.zerodroid.ui.theme.TerminalGreen
 
 @Composable
-fun WifiScreen(
-    viewModel: WifiViewModel = hiltViewModel()
-) {
+fun WifiScreen(viewModel: WifiViewModel = hiltViewModel()) {
     PermissionGate(
         permissions = PermissionUtils.wifiPermissions(),
-        rationale = "Location permission is required by Android to scan WiFi networks."
-    ) {
-        WifiContent(viewModel = viewModel)
-    }
+        rationale = "Android 系统要求授予位置权限后才能扫描 Wi-Fi 网络。"
+    ) { WifiContent(viewModel = viewModel) }
 }
 
 @Composable
@@ -55,139 +51,42 @@ private fun WifiContent(viewModel: WifiViewModel) {
     val selectedBand by viewModel.selectedBand.collectAsState()
     val isScanning by viewModel.isScanning.collectAsState()
     val scanError by viewModel.error.collectAsState()
+    HardwareLifecycleEffect(isActive = isScanning, onPause = viewModel::stopScan, onResume = viewModel::startScan)
+    val filteredAps = if (selectedBand != null) accessPoints.filter { it.band == selectedBand } else accessPoints
 
-    HardwareLifecycleEffect(
-        isActive = isScanning,
-        onPause = viewModel::stopScan,
-        onResume = viewModel::startScan
-    )
-
-    val filteredAps = if (selectedBand != null) {
-        accessPoints.filter { it.band == selectedBand }
-    } else {
-        accessPoints
-    }
-
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        // Start/Stop control
+    LazyColumn(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         item {
             Spacer(modifier = Modifier.height(4.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                // Chips take the leftover width and scroll if needed so the Scan/Stop
-                // button never gets squeezed into a wrapped two-line label.
-                Row(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(end = 8.dp)
-                        .horizontalScroll(rememberScrollState()),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    FilterChip(
-                        selected = selectedBand == null,
-                        onClick = { viewModel.selectBand(null) },
-                        label = { Text("All") },
-                        colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = MaterialTheme.colorScheme.primaryContainer
-                        )
-                    )
-                    FilterChip(
-                        selected = selectedBand == WifiBand.BAND_2_4GHZ,
-                        onClick = { viewModel.selectBand(WifiBand.BAND_2_4GHZ) },
-                        label = { Text("2.4 GHz") },
-                        colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = MaterialTheme.colorScheme.primaryContainer
-                        )
-                    )
-                    FilterChip(
-                        selected = selectedBand == WifiBand.BAND_5GHZ,
-                        onClick = { viewModel.selectBand(WifiBand.BAND_5GHZ) },
-                        label = { Text("5 GHz") },
-                        colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = MaterialTheme.colorScheme.primaryContainer
-                        )
-                    )
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                Row(modifier = Modifier.weight(1f).padding(end = 8.dp).horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    FilterChip(selected = selectedBand == null, onClick = { viewModel.selectBand(null) }, label = { Text("全部") }, colors = FilterChipDefaults.filterChipColors(selectedContainerColor = MaterialTheme.colorScheme.primaryContainer))
+                    FilterChip(selected = selectedBand == WifiBand.BAND_2_4GHZ, onClick = { viewModel.selectBand(WifiBand.BAND_2_4GHZ) }, label = { Text("2.4 GHz") }, colors = FilterChipDefaults.filterChipColors(selectedContainerColor = MaterialTheme.colorScheme.primaryContainer))
+                    FilterChip(selected = selectedBand == WifiBand.BAND_5GHZ, onClick = { viewModel.selectBand(WifiBand.BAND_5GHZ) }, label = { Text("5 GHz") }, colors = FilterChipDefaults.filterChipColors(selectedContainerColor = MaterialTheme.colorScheme.primaryContainer))
                 }
                 if (isScanning) {
-                    OutlinedButton(onClick = { viewModel.stopScan() }) {
-                        Text("Stop", maxLines = 1, softWrap = false)
-                    }
+                    OutlinedButton(onClick = { viewModel.stopScan() }) { Text("停止", maxLines = 1, softWrap = false) }
                 } else {
-                    Button(
-                        onClick = { viewModel.startScan() },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = TerminalGreen.copy(alpha = 0.15f),
-                            contentColor = TerminalGreen
-                        )
-                    ) {
-                        Text("Scan", maxLines = 1, softWrap = false)
-                    }
+                    Button(onClick = { viewModel.startScan() }, colors = ButtonDefaults.buttonColors(containerColor = TerminalGreen.copy(alpha = 0.15f), contentColor = TerminalGreen)) { Text("扫描", maxLines = 1, softWrap = false) }
                 }
             }
         }
-
-        scanError?.let { message ->
-            item {
-                Text(text = message, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
-            }
-        }
-
+        scanError?.let { message -> item { Text(text = message, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error) } }
         if (!isScanning && accessPoints.isEmpty()) {
-            item {
-                EmptyState(
-                    icon = Icons.Default.Wifi,
-                    title = "WiFi Idle",
-                    subtitle = "Tap Scan to discover nearby networks.\nAuto-stops after 30 seconds."
-                )
-            }
+            item { EmptyState(icon = Icons.Default.Wifi, title = "Wi-Fi 待机", subtitle = "点击“扫描”搜索附近网络。\n30 秒后自动停止。") }
         } else {
             item {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    if (isScanning) {
-                        ScanningIndicator(
-                            isScanning = true,
-                            label = "${filteredAps.size} networks found"
-                        )
-                    } else {
-                        Text(
-                            text = "> ${filteredAps.size} networks found",
-                            style = MaterialTheme.typography.labelLarge,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                    Text(
-                        text = "${accessPoints.count { it.band == WifiBand.BAND_2_4GHZ }} / ${accessPoints.count { it.band == WifiBand.BAND_5GHZ }}",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                    if (isScanning) ScanningIndicator(isScanning = true, label = "已发现 ${filteredAps.size} 个网络")
+                    else Text(text = "> 已发现 ${filteredAps.size} 个网络", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                    Text(text = "${accessPoints.count { it.band == WifiBand.BAND_2_4GHZ }} / ${accessPoints.count { it.band == WifiBand.BAND_5GHZ }}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
-
             item {
-                val filteredScores = if (selectedBand != null) {
-                    channelScores.filter { it.band == selectedBand }
-                } else {
-                    channelScores
-                }
+                val filteredScores = if (selectedBand != null) channelScores.filter { it.band == selectedBand } else channelScores
                 WifiChannelChart(channelScores = filteredScores)
             }
-
-            items(filteredAps, key = { it.bssid }) { ap ->
-                WifiAccessPointItem(ap = ap)
-            }
+            items(filteredAps, key = { it.bssid }) { ap -> WifiAccessPointItem(ap = ap) }
         }
-
         item { Spacer(modifier = Modifier.height(16.dp)) }
     }
 }

@@ -88,8 +88,8 @@ fun IrCameraView(
                                         CameraDetection(
                                             source = DetectionSource.IR,
                                             threatLevel = if (spots >= 3) ThreatLevel.HIGH else ThreatLevel.MEDIUM,
-                                            title = "IR Light Detected",
-                                            detail = "$spots bright spot(s) detected — possible IR LED(s)"
+                                            title = "检测到 IR 光源",
+                                            detail = "检测到 $spots 个亮点 — 可能存在 IR LED"
                                         )
                                     )
                                 }
@@ -118,7 +118,7 @@ fun IrCameraView(
         overlayBitmap?.let { bmp ->
             Image(
                 bitmap = bmp.asImageBitmap(),
-                contentDescription = "IR spot overlay",
+                contentDescription = "IR 光点叠加层",
                 modifier = Modifier.fillMaxSize(),
                 alpha = 0.6f
             )
@@ -126,7 +126,7 @@ fun IrCameraView(
 
         // Instructions overlay
         Text(
-            text = "Point camera slowly around the room.\nIR LEDs appear as bright white/purple dots.\n${if (irSpotCount > 0) "$irSpotCount bright spot(s) detected!" else "No IR spots detected"}",
+            text = "缓慢移动摄像头扫描房间。\nIR LED 通常显示为明亮的白色/紫色光点。\n${if (irSpotCount > 0) "检测到 $irSpotCount 个亮点！" else "未检测到 IR 光点"}",
             color = if (irSpotCount > 0) TerminalRed else Color.White,
             style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,

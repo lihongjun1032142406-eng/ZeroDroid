@@ -48,6 +48,13 @@ fun VibrationDetectorView(
         VibrationSeverity.HIGH -> TerminalRed
         VibrationSeverity.EXTREME -> TerminalRed
     }
+    val severityLabel = when (state.severity) {
+        VibrationSeverity.NONE -> "无"
+        VibrationSeverity.LOW -> "低"
+        VibrationSeverity.MODERATE -> "中等"
+        VibrationSeverity.HIGH -> "高"
+        VibrationSeverity.EXTREME -> "极高"
+    }
 
     TerminalCard(modifier = modifier, onClick = { expanded = !expanded }) {
         Row(
@@ -56,12 +63,12 @@ fun VibrationDetectorView(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "> Vibration",
+                text = "> 振动检测",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.primary
             )
             Text(
-                text = "${state.severity.label} \u00B7 ${String.format(Locale.US, "%.2f", state.currentMagnitude)} m/s\u00B2",
+                text = "$severityLabel · ${String.format(Locale.US, "%.2f", state.currentMagnitude)} m/s²",
                 style = MaterialTheme.typography.bodyMedium,
                 color = severityColor
             )
@@ -83,17 +90,17 @@ fun VibrationDetectorView(
                     Column {
                         Row(modifier = Modifier.fillMaxWidth(0.7f)) {
                             Column(modifier = Modifier.weight(1f)) {
-                                Text("Current", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                                Text(String.format(Locale.US, "%.2f m/s\u00B2", state.currentMagnitude), style = MaterialTheme.typography.bodyMedium, color = severityColor)
+                                Text("当前", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text(String.format(Locale.US, "%.2f m/s²", state.currentMagnitude), style = MaterialTheme.typography.bodyMedium, color = severityColor)
                             }
                             Column(modifier = Modifier.weight(1f)) {
-                                Text("Peak", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                                Text(String.format(Locale.US, "%.2f m/s\u00B2", state.peakMagnitude), style = MaterialTheme.typography.bodyMedium, color = TerminalRed)
+                                Text("峰值", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text(String.format(Locale.US, "%.2f m/s²", state.peakMagnitude), style = MaterialTheme.typography.bodyMedium, color = TerminalRed)
                             }
                         }
                     }
                     Button(onClick = onReset, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)) {
-                        Text("Reset", style = MaterialTheme.typography.labelSmall)
+                        Text("重置", style = MaterialTheme.typography.labelSmall)
                     }
                 }
 

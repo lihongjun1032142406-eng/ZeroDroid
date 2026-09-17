@@ -37,7 +37,7 @@ fun WifiAwareControlPanel(
 
     TerminalCard(modifier = modifier) {
         Text(
-            text = "> Wi-Fi Aware Controls",
+            text = "> Wi-Fi Aware 控制",
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.primary
         )
@@ -46,7 +46,7 @@ fun WifiAwareControlPanel(
         OutlinedTextField(
             value = state.serviceName,
             onValueChange = onServiceNameChange,
-            label = { Text("Service Name") },
+            label = { Text("服务名称") },
             colors = fieldColors,
             modifier = Modifier.fillMaxWidth(),
             enabled = !state.isSessionAttached
@@ -60,7 +60,7 @@ fun WifiAwareControlPanel(
                 enabled = state.isAvailable,
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                 modifier = Modifier.fillMaxWidth()
-            ) { Text(if (state.isAvailable) "Attach Session" else "Wi-Fi Aware unavailable") }
+            ) { Text(if (state.isAvailable) "连接会话" else "Wi-Fi Aware 不可用") }
         } else {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -72,7 +72,7 @@ fun WifiAwareControlPanel(
                         containerColor = if (state.isPublishing) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
                     ),
                     modifier = Modifier.weight(1f)
-                ) { Text(if (state.isPublishing) "Stop Pub" else "Publish") }
+                ) { Text(if (state.isPublishing) "停止发布" else "发布") }
 
                 Button(
                     onClick = onToggleSubscribe,
@@ -80,7 +80,7 @@ fun WifiAwareControlPanel(
                         containerColor = if (state.isSubscribing) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
                     ),
                     modifier = Modifier.weight(1f)
-                ) { Text(if (state.isSubscribing) "Stop Sub" else "Subscribe") }
+                ) { Text(if (state.isSubscribing) "停止订阅" else "订阅") }
             }
 
             Spacer(modifier = Modifier.height(4.dp))
@@ -88,7 +88,7 @@ fun WifiAwareControlPanel(
                 onClick = onDetach,
                 colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error),
                 modifier = Modifier.fillMaxWidth()
-            ) { Text("Detach") }
+            ) { Text("断开会话") }
         }
     }
 }

@@ -30,15 +30,15 @@ import java.util.Locale
 @Composable
 fun WardrivingDashboard(stats: WardrivingStats, modifier: Modifier = Modifier) {
     TerminalCard(modifier = modifier) {
-        Text(text = "> Dashboard", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
+        Text(text = "> 仪表盘", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
         Spacer(modifier = Modifier.height(8.dp))
 
         // Stats row
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-            StatBox("SSIDs", stats.uniqueSsids.toString(), TerminalCyan)
-            StatBox("BSSIDs", stats.uniqueBssids.toString(), TerminalGreen)
-            StatBox("Records", stats.totalRecords.toString(), TerminalAmber)
-            StatBox("Duration", stats.formattedDuration, MaterialTheme.colorScheme.onSurface)
+            StatBox("SSID", stats.uniqueSsids.toString(), TerminalCyan)
+            StatBox("BSSID", stats.uniqueBssids.toString(), TerminalGreen)
+            StatBox("记录", stats.totalRecords.toString(), TerminalAmber)
+            StatBox("时长", stats.formattedDuration, MaterialTheme.colorScheme.onSurface)
         }
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -79,11 +79,11 @@ fun WardrivingDashboard(stats: WardrivingStats, modifier: Modifier = Modifier) {
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Canvas(modifier = Modifier.size(8.dp)) { drawCircle(TerminalGreen) }
-                    Text("Secured: ${stats.securedCount}", style = MaterialTheme.typography.bodySmall, color = TerminalGreen)
+                    Text("已加密：${stats.securedCount}", style = MaterialTheme.typography.bodySmall, color = TerminalGreen)
                 }
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Canvas(modifier = Modifier.size(8.dp)) { drawCircle(TerminalRed) }
-                    Text("Open: ${stats.openCount} (${String.format(Locale.US, "%.0f", stats.openPercent)}%)", style = MaterialTheme.typography.bodySmall, color = TerminalRed)
+                    Text("开放：${stats.openCount}（${String.format(Locale.US, "%.0f", stats.openPercent)}%）", style = MaterialTheme.typography.bodySmall, color = TerminalRed)
                 }
             }
         }

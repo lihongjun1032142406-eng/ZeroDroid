@@ -33,7 +33,7 @@ fun CellTowerNeighborList(
 
     TerminalCard(modifier = modifier) {
         Text(
-            text = "> Neighbor Cells (${sorted.size})",
+            text = "> 邻区基站（${sorted.size}）",
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.primary
         )

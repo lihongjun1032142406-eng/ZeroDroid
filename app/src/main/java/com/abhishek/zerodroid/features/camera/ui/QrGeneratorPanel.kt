@@ -78,10 +78,9 @@ fun QrGeneratorPanel(
         modifier = modifier.fillMaxSize().padding(horizontal = 16.dp).verticalScroll(rememberScrollState())
     ) {
         Spacer(modifier = Modifier.height(4.dp))
-        Text(text = "> QR Generator", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+        Text(text = "> 二维码生成器", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Input type selector chips
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             QrGeneratorInputType.entries.forEach { inputType ->
                 FilterChip(
@@ -114,7 +113,7 @@ fun QrGeneratorPanel(
                 QrGeneratorInputType.TEXT -> {
                     OutlinedTextField(
                         value = genState.textInput, onValueChange = { viewModel.setGeneratorText(it) },
-                        label = { Text("Text content") }, placeholder = { Text("Enter text to encode...") },
+                        label = { Text("文本内容") }, placeholder = { Text("输入要编码的文本…") },
                         colors = fieldColors, modifier = Modifier.fillMaxWidth(), minLines = 3, maxLines = 6
                     )
                 }
@@ -129,13 +128,13 @@ fun QrGeneratorPanel(
                     val securityExpanded = remember { mutableStateOf(false) }
                     OutlinedTextField(
                         value = genState.wifiSsid, onValueChange = { viewModel.setWifiSsid(it) },
-                        label = { Text("SSID (Network Name)") }, colors = fieldColors,
+                        label = { Text("SSID（网络名称）") }, colors = fieldColors,
                         modifier = Modifier.fillMaxWidth(), singleLine = true
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     OutlinedTextField(
                         value = genState.wifiPassword, onValueChange = { viewModel.setWifiPassword(it) },
-                        label = { Text("Password") }, colors = fieldColors,
+                        label = { Text("密码") }, colors = fieldColors,
                         modifier = Modifier.fillMaxWidth(), singleLine = true
                     )
                     Spacer(modifier = Modifier.height(8.dp))
@@ -145,7 +144,7 @@ fun QrGeneratorPanel(
                     ) {
                         OutlinedTextField(
                             value = genState.wifiSecurity.displayName, onValueChange = {}, readOnly = true,
-                            label = { Text("Security") },
+                            label = { Text("安全类型") },
                             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = securityExpanded.value) },
                             colors = fieldColors,
                             modifier = Modifier.fillMaxWidth().menuAnchor(MenuAnchorType.PrimaryNotEditable)
@@ -170,7 +169,7 @@ fun QrGeneratorPanel(
                 onClick = { viewModel.generateQrCode() }, enabled = genState.canGenerate,
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                 modifier = Modifier.fillMaxWidth()
-            ) { Text("Generate QR Code") }
+            ) { Text("生成二维码") }
 
             genState.errorMessage?.let { error ->
                 Spacer(modifier = Modifier.height(4.dp))
@@ -182,7 +181,7 @@ fun QrGeneratorPanel(
 
         genState.generatedBitmap?.let { bitmap ->
             TerminalCard {
-                Text(text = "> Generated QR Code", style = MaterialTheme.typography.labelSmall, color = TerminalCyan)
+                Text(text = "> 已生成二维码", style = MaterialTheme.typography.labelSmall, color = TerminalCyan)
                 Spacer(modifier = Modifier.height(8.dp))
                 Box(
                     modifier = Modifier.fillMaxWidth().aspectRatio(1f)
@@ -190,7 +189,7 @@ fun QrGeneratorPanel(
                     contentAlignment = Alignment.Center
                 ) {
                     Image(
-                        bitmap = bitmap.asImageBitmap(), contentDescription = "Generated QR Code",
+                        bitmap = bitmap.asImageBitmap(), contentDescription = "已生成二维码",
                         modifier = Modifier.fillMaxSize().padding(16.dp), contentScale = ContentScale.Fit
                     )
                 }
@@ -200,7 +199,7 @@ fun QrGeneratorPanel(
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically) {
                     IconButton(onClick = { clipboardManager.setText(AnnotatedString(genState.encodedContent)) }) {
-                        Icon(imageVector = Icons.Default.ContentCopy, contentDescription = "Copy",
+                        Icon(imageVector = Icons.Default.ContentCopy, contentDescription = "复制",
                             tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))
                     }
                     Spacer(modifier = Modifier.width(4.dp))
@@ -209,10 +208,10 @@ fun QrGeneratorPanel(
                             type = "text/plain"
                             putExtra(android.content.Intent.EXTRA_TEXT, genState.encodedContent)
                         }
-                        context.startActivity(android.content.Intent.createChooser(shareIntent, "Share QR content")
+                        context.startActivity(android.content.Intent.createChooser(shareIntent, "分享二维码内容")
                             .addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK))
                     }) {
-                        Icon(imageVector = Icons.Default.Share, contentDescription = "Share",
+                        Icon(imageVector = Icons.Default.Share, contentDescription = "分享",
                             tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))
                     }
                 }

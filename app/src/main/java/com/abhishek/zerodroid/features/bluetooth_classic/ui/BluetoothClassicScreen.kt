@@ -64,7 +64,7 @@ fun BluetoothClassicScreen(
 ) {
     PermissionGate(
         permissions = PermissionUtils.blePermissions(),
-        rationale = "Bluetooth permission is needed to scan for nearby Classic Bluetooth devices."
+        rationale = "扫描附近的经典蓝牙设备需要蓝牙权限。"
     ) {
         BluetoothClassicContent(viewModel = viewModel)
     }
@@ -145,11 +145,11 @@ private fun DeviceScanContent(
                 if (state.isScanning) {
                     ScanningIndicator(
                         isScanning = true,
-                        label = "$totalDevices devices found"
+                        label = "已发现 $totalDevices 个设备"
                     )
                 } else {
                     Text(
-                        text = "> $totalDevices devices found",
+                        text = "> 已发现 $totalDevices 个设备",
                         style = MaterialTheme.typography.labelLarge,
                         color = MaterialTheme.colorScheme.primary
                     )
@@ -161,7 +161,7 @@ private fun DeviceScanContent(
                             contentColor = MaterialTheme.colorScheme.error
                         )
                     ) {
-                        Text("Stop")
+                        Text("停止")
                     }
                 } else {
                     Button(
@@ -170,7 +170,7 @@ private fun DeviceScanContent(
                             containerColor = MaterialTheme.colorScheme.primary
                         )
                     ) {
-                        Text("Scan")
+                        Text("扫描")
                     }
                 }
             }
@@ -191,7 +191,7 @@ private fun DeviceScanContent(
         if (sppState.isConnecting) {
             item {
                 Text(
-                    text = "> Connecting via SPP...",
+                    text = "> 正在通过 SPP 连接...",
                     style = MaterialTheme.typography.bodySmall,
                     color = TerminalAmber,
                     fontFamily = FontFamily.Monospace
@@ -215,7 +215,7 @@ private fun DeviceScanContent(
             item {
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "> PAIRED DEVICES (${state.pairedDevices.size})",
+                    text = "> 已配对设备（${state.pairedDevices.size}）",
                     style = MaterialTheme.typography.labelMedium,
                     color = TerminalAmber,
                     fontFamily = FontFamily.Monospace
@@ -234,7 +234,7 @@ private fun DeviceScanContent(
         item {
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "> DISCOVERED DEVICES (${state.discoveredDevices.size})",
+                text = "> 已发现设备（${state.discoveredDevices.size}）",
                 style = MaterialTheme.typography.labelMedium,
                 color = TerminalCyan,
                 fontFamily = FontFamily.Monospace
@@ -245,8 +245,8 @@ private fun DeviceScanContent(
             item {
                 EmptyState(
                     icon = Icons.Default.Bluetooth,
-                    title = "No devices discovered",
-                    subtitle = "Tap Scan to search for nearby Classic Bluetooth devices"
+                    title = "尚未发现设备",
+                    subtitle = "点击“扫描”搜索附近的经典蓝牙设备"
                 )
             }
         }
@@ -337,7 +337,7 @@ private fun ClassicDeviceItem(
             ) {
                 Icon(
                     imageVector = Icons.Default.Link,
-                    contentDescription = "Connect SPP",
+                    contentDescription = "连接 SPP",
                     modifier = Modifier.padding(end = 4.dp)
                 )
                 Text("SPP", style = MaterialTheme.typography.labelSmall)
@@ -377,7 +377,7 @@ private fun SppTerminalPanel(
         ) {
             Column {
                 Text(
-                    text = "> SPP TERMINAL",
+                    text = "> SPP 终端",
                     style = MaterialTheme.typography.labelLarge,
                     color = TerminalGreen,
                     fontFamily = FontFamily.Monospace
@@ -397,10 +397,10 @@ private fun SppTerminalPanel(
             ) {
                 Icon(
                     imageVector = Icons.Default.Close,
-                    contentDescription = "Disconnect",
+                    contentDescription = "断开连接",
                     modifier = Modifier.padding(end = 4.dp)
                 )
-                Text("Disconnect")
+                Text("断开连接")
             }
         }
 
@@ -409,7 +409,7 @@ private fun SppTerminalPanel(
         // Connection status
         if (sppState.isConnecting) {
             Text(
-                text = "> Connecting...",
+                text = "> 正在连接...",
                 style = MaterialTheme.typography.bodySmall,
                 color = TerminalAmber,
                 fontFamily = FontFamily.Monospace
@@ -418,7 +418,7 @@ private fun SppTerminalPanel(
 
         sppState.error?.let { error ->
             Text(
-                text = "> ERROR: $error",
+                text = "> 错误：$error",
                 style = MaterialTheme.typography.bodySmall,
                 color = TerminalRed,
                 fontFamily = FontFamily.Monospace
@@ -432,7 +432,7 @@ private fun SppTerminalPanel(
         ) {
             if (sppState.lines.isEmpty()) {
                 Text(
-                    text = if (sppState.isConnected) "> Connected. Waiting for data..." else "> No data yet.",
+                    text = if (sppState.isConnected) "> 已连接，正在等待数据..." else "> 暂无数据。",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontFamily = FontFamily.Monospace
@@ -463,7 +463,7 @@ private fun SppTerminalPanel(
                 modifier = Modifier.weight(1f),
                 placeholder = {
                     Text(
-                        text = "Type command...",
+                        text = "输入命令...",
                         fontFamily = FontFamily.Monospace
                     )
                 },
@@ -499,7 +499,7 @@ private fun SppTerminalPanel(
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.Send,
-                    contentDescription = "Send",
+                    contentDescription = "发送",
                     tint = if (sppState.isConnected && inputText.isNotBlank()) TerminalGreen
                     else MaterialTheme.colorScheme.onSurfaceVariant
                 )

@@ -78,13 +78,13 @@ fun IrRemoteGridPanel(
     )
 
     TerminalCard(modifier = modifier) {
-        Text(text = "> Remote Control", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
+        Text(text = "> 遥控器", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
         Spacer(modifier = Modifier.height(8.dp))
 
         ExposedDropdownMenuBox(expanded = brandExpanded, onExpandedChange = { brandExpanded = it }) {
             OutlinedTextField(
-                value = if (selectedProfile != null) "${selectedProfile.brand} ${selectedProfile.deviceType}" else "Select Device",
-                onValueChange = {}, readOnly = true, label = { Text("Device") },
+                value = if (selectedProfile != null) "${selectedProfile.brand} ${selectedProfile.deviceType}" else "选择设备",
+                onValueChange = {}, readOnly = true, label = { Text("设备") },
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = brandExpanded) },
                 colors = fieldColors,
                 modifier = Modifier.fillMaxWidth().menuAnchor(MenuAnchorType.PrimaryNotEditable)
@@ -105,7 +105,7 @@ fun IrRemoteGridPanel(
             lastTransmitResult?.let { result ->
                 Spacer(modifier = Modifier.height(8.dp))
                 val (text, color) = when (result) {
-                    is TransmitResult.Success -> "Signal transmitted" to TerminalGreen
+                    is TransmitResult.Success -> "信号已发送" to TerminalGreen
                     is TransmitResult.Error -> result.message to TerminalRed
                 }
                 Text(text = text, style = MaterialTheme.typography.labelSmall, color = color)
@@ -119,7 +119,6 @@ private fun RemoteControlLayout(profile: IrRemoteProfile, onButtonPress: (IrRemo
     val buttonMap = profile.buttons.associateBy { it.icon }
 
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        // Top row: Power, Input, Menu
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
             buttonMap["power"]?.let { RemoteButton(Icons.Default.Power, it.label, TerminalRed) { onButtonPress(it) } }
             buttonMap["input"]?.let { RemoteButton(Icons.Default.Input, it.label, TerminalCyan) { onButtonPress(it) } }
@@ -127,28 +126,24 @@ private fun RemoteControlLayout(profile: IrRemoteProfile, onButtonPress: (IrRemo
         }
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Middle: Vol | D-Pad | Channel
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically) {
-            // Volume
             Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text("VOL", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("音量", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 buttonMap["volume_up"]?.let { RemoteButton(Icons.AutoMirrored.Filled.VolumeUp, "+", TerminalGreen, true) { onButtonPress(it) } }
-                buttonMap["mute"]?.let { RemoteButton(Icons.Default.VolumeOff, "Mute", TerminalAmber, true) { onButtonPress(it) } }
+                buttonMap["mute"]?.let { RemoteButton(Icons.Default.VolumeOff, "静音", TerminalAmber, true) { onButtonPress(it) } }
                 buttonMap["volume_down"]?.let { RemoteButton(Icons.AutoMirrored.Filled.VolumeDown, "-", TerminalGreen, true) { onButtonPress(it) } }
             }
-            // D-Pad
             Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(2.dp)) {
                 buttonMap["nav_up"]?.let { RemoteButton(Icons.Default.ArrowUpward, "", TerminalCyan, true) { onButtonPress(it) } }
                 Row(horizontalArrangement = Arrangement.spacedBy(2.dp), verticalAlignment = Alignment.CenterVertically) {
                     buttonMap["nav_left"]?.let { RemoteButton(Icons.Default.ArrowBack, "", TerminalCyan, true) { onButtonPress(it) } }
-                    buttonMap["nav_ok"]?.let { RemoteButton(Icons.Default.CheckCircle, "OK", TerminalGreen) { onButtonPress(it) } }
+                    buttonMap["nav_ok"]?.let { RemoteButton(Icons.Default.CheckCircle, "确定", TerminalGreen) { onButtonPress(it) } }
                     buttonMap["nav_right"]?.let { RemoteButton(Icons.Default.ArrowForward, "", TerminalCyan, true) { onButtonPress(it) } }
                 }
                 buttonMap["nav_down"]?.let { RemoteButton(Icons.Default.ArrowDownward, "", TerminalCyan, true) { onButtonPress(it) } }
             }
-            // Channel
             Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text("CH", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("频道", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 buttonMap["channel_up"]?.let { RemoteButton(Icons.Default.KeyboardArrowUp, "+", TerminalAmber, true) { onButtonPress(it) } }
                 Spacer(modifier = Modifier.height(40.dp))
                 buttonMap["channel_down"]?.let { RemoteButton(Icons.Default.KeyboardArrowDown, "-", TerminalAmber, true) { onButtonPress(it) } }
@@ -156,7 +151,6 @@ private fun RemoteControlLayout(profile: IrRemoteProfile, onButtonPress: (IrRemo
         }
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Bottom: Back, Exit
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
             buttonMap["back"]?.let { RemoteButton(Icons.Default.Undo, it.label, TerminalCyan) { onButtonPress(it) } }
             buttonMap["exit"]?.let { RemoteButton(Icons.AutoMirrored.Filled.ExitToApp, it.label, TerminalAmber) { onButtonPress(it) } }

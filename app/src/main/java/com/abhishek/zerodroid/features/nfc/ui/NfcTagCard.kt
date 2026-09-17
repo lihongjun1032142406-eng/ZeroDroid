@@ -36,7 +36,7 @@ fun NfcTagCard(
 
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = "Tech: ${tag.techList.joinToString(", ")}",
+            text = "技术类型: ${tag.techList.joinToString(", ")}",
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -59,7 +59,7 @@ fun NfcTagCard(
         if (tag.ndefMessages.isNotEmpty()) {
             Spacer(modifier = Modifier.height(6.dp))
             Text(
-                text = "> NDEF Records",
+                text = "> NDEF 记录",
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.primary
             )
